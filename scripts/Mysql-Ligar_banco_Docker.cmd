@@ -1,0 +1,1 @@
+docker run --name mysql -d -p 3310:3306 -e MYSQL_ROOT_PASSWORD=root bitnami/mysql:latest

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <%- include('layout/_header', { siteTitle: 'Economizai - Cadastro' }) %>
+    <%- include('layout/_css') %>
+</head>
+<body>
+<main class="container">
+    <form class="row justify-content-center" method="POST" action="/cadastro">
+        <section class="col-lg-6 col-md-6 col-12 cardbase">
+            <div class="cadastro">
+                <h1>Cadastrar</h1>
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Nome" class="form-control" id="nome" name="nome"
+                       aria-describedby="nome" required>
+            </div>
+            <br/>
+            <div class="form-group">
+                <input type="email" placeholder="Email" class="form-control" id="email" name="email"
+                       aria-describedby="email" required>
+            </div>
+            <br/>
+            <div class="form-group">
+                <input type="email" placeholder="Confirmação de email" class="form-control" id="confirmacaoEmail" name="confirmacaoEmail"
+                       aria-describedby="email" required>
+            </div>
+            <br/>
+            <div class="form-group">
+                <input type="password" placeholder="Senha" class="form-control" id="senha" name="senha"
+                       aria-describedby="senha" required>
+            </div>
+            <br/>
+            <div class="form-group">
+                <input type="password" placeholder="Confirmação de Senha" class="form-control" id="confirmacaoSenha" name="confirmacaoSenha"
+                       aria-describedby="senha" required>
+            </div>
+            <br/>
+            <div class="text-center">
+                <button type="submit" class="col-12 btn btn-secondary btn-second">Cadastrar</button>
+            </div>
+
+            <% if(enabled) { %>
+                <%- include('components/alert', { enabled, title, content }) %>
+            <% } %>
+
+        </section>
+    </form>
+
+</main>
+
+</body>
+<%- include('layout/_script') %>
+</html>

@@ -1,0 +1,141 @@
+
+:root {
+    --primaria-texto: #ffffff;
+    --secundaria-texto: #20f734;
+    --terciaria-texto: #122535;
+
+    --primaria: #122535;
+    --secundaria: #1ffe33;
+
+    --sucesso: #1ffe33;
+    --info: #2283c5;
+    --alerta: #c5e02e;
+    --erro: #f21b09;
+
+    --link-primario: #5a8faf;
+    --link-secundario: #ffffff;
+}
+
+* {
+    font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, h4, h5, p, label {
+    color: var(--primaria-texto);
+}
+
+html, body, main {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-color: var(--primaria);
+}
+
+main.container {
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active  {
+    background-color: var(--secundaria);
+    border-color: var(--secundaria);
+    border-radius: 20px;
+    color: var(--terciaria-texto);
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    min-height: 46px;
+}
+
+.btn-primary:hover {
+    filter: brightness(0.7);
+    transition: filter ease-in-out .3s;
+}
+
+section.cardbase {
+    border: 2px var(--secundaria) solid;
+    border-radius: 20px;
+    padding: 80px 60px;
+}
+
+.cardbase {
+    font-family: 'Poppins', sans-serif;
+}
+
+.cardbase a {
+    color: var(--link-secundario);
+    font-weight: bold;
+}
+
+.cardbase h1 {
+    color: var(--secundaria-texto);
+    margin-bottom: 80px;
+    width: 100%;
+    text-align: center;
+}
+
+.cardbase .form-control {
+    background-color: transparent;
+    border-radius: inherit;
+    border: 2px none var(--sucesso);
+    border-bottom-style: solid;
+    color: var(--primaria-texto);
+}
+
+.cardbase .form-control::placeholder {
+    color: var(--primaria-texto);
+}
+
+.cardbase .form-control:focus {
+    box-shadow: none;
+}
+
+.cardbase .cadastro {
+    text-align: center;
+}
+
+.cadastro h1 {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+}
+
+.form-group > div.icon {
+    position: relative;
+    width: 100%;
+}
+
+div.form-group i {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--primaria);
+    color: var(--secundaria-texto);
+}
+.alert {
+    margin-top: 35px;
+}
+
+.alert .size-content {
+    font-size: 11pt;
+}
+
+.btn-second, .btn-second:hover, .btn-second:focus, .btn.btn-second:active,
+.btn-btn-second, .btn-btn-second:hover, .btn-btn-second:not(:disabled):not(.disabled).active, .btn-btn-second:not(:disabled):not(.disabled):active{
+    border-radius: 5px;
+    background-color: var(--primaria);
+    color: var(--primaria-texto);
+    border: 2px var(--secundaria) solid;
+    max-width: 120px;
+    font-family: 'Lato', sans-serif;
+}
+
+.alert-dismissible {
+    padding-right: 10px;
+}
+
+.size-content {
+    margin-top: 20px;
+}

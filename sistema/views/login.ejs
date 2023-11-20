@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <%-include('layout/_header', { siteTitle: 'Economizai - Login' }) %>
+    <%-include('layout/_css') %>
+</head>
+<body>
+    <main class="container">
+        <form class="row justify-content-center" method="POST" action="/">
+            <section class="col-lg-6 col-md-6 col-12 cardbase">
+                <div>
+                    <h1>Login</h1>
+                </div>
+                <div class="form-group">
+                    <div class="icon">
+                        <input type="email" placeholder="Email" class="form-control" id="email" name="email" aria-describedby="email" required>
+                        <i class="fa-regular fa-envelope"></i>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <div class="icon">
+                        <input type="password" placeholder="Senha" class="form-control" id="senha" name="senha" aria-describedby="senha" required>
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Recuperar senha</label>
+                </div>
+                <div>
+                    <button type="submit" class="col-12 btn btn-primary btn-primario">Entrar</button>
+                </div>
+                <div class="cadastro">
+                    <br/>
+                    <p>Primeiro acesso: <a href="/cadastro">cadastrar</a></p>
+                </div>
+
+                <% if(enabled) {%>
+                    <%- include('components/alert', { enabled, title, content }) %>
+                <% }%>
+
+            </section>
+        </form>
+
+    </main>
+
+</body>
+<%-include('layout/_script') %>
+</html>

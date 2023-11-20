@@ -1,0 +1,20 @@
+<% if(enabled) {%>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong><%= title %></strong>
+        <br/>
+        <% if(content.length <= 1) { %>
+            <ul class="size-content">
+                <li><%= content %>.</li>
+            </ul>
+        <% } else { %>
+            <ul class="size-content">
+                <% content.forEach((erro) => { %>
+                    <li><%= erro %>.</li>
+                <% }); %>
+            </ul>
+        <% } %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<% } %>
