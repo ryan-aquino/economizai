@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Sistema destinado a entrega do trabalho de conclusao de curso de Analise e desenvolvimento de sistemas",
   "main": "app.js",
-  "author": "Ryan Silva",
+  "author": "Gustavo Liros, Matheus Delfino, Nathan Rosa, Ryan Silva",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon app.js",
