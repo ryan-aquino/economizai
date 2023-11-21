@@ -5,7 +5,7 @@ module.exports = {
         user: 'root',
         password: 'root',
         database: 'economizaiDB',
-        port: 3310
+        port: 3306
     },
     saltRounds: 10,
     chave: 'c62aa591fb1142d4868fa848ce901cad',

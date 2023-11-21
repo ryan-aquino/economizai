@@ -6,7 +6,7 @@
   "author": "Ryan Silva",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon -e 'js,mjs,cjs,json,ejs' app.js",
+    "dev": "nodemon app.js",
     "start": "node app.js"
   },
   "dependencies": {

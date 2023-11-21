@@ -7,7 +7,7 @@ module.exports = {
     indexGet: async (req, res) => {
         try {
             if(req.cookies['_fgp'])
-               return res.redirect('/dashboard')
+               return res.redirect('/inicio')
 
            return res.render('login', { enabled: false });
         } catch (error) {
@@ -23,7 +23,7 @@ module.exports = {
 
             if(usuario.valid) {
                 res.cookie('_fgp', criptografar(usuario.response.id.toString(), chave), { maxAge });
-                return res.redirect('/dashboard');
+                return res.redirect('/inicio');
             }
 
             return res.render('login', { enabled: !usuario.valid,
@@ -67,13 +67,20 @@ module.exports = {
         }
     },
 
-    dashboardGet: async (req, res) => {
+    inicioGet: async (req, res) => {
         if(!req.cookies['_fgp'])
             return res.redirect('/')
 
         const id = descriptografar(req.cookies['_fgp'], chave)
+        return res.render('inicio')
+    },
+    
+    perfilGet: async (req, res) => {
+        if(!req.cookies['_fgp'])
+            return res.redirect('/')
 
-        return res.render('dashboard')
-    }
-
+        const id = descriptografar(req.cookies['_fgp'], chave)
+        return res.render('perfil')
+    },
+    
 }

@@ -97,6 +97,13 @@ section.cardbase {
     text-align: center;
 }
 
+.form-control .basic-input {
+    background-color: transparent;
+    border-radius: 10px;
+    border: 2px var(--sucesso) solid;
+    color: var(--primaria-texto);
+}
+
 .cadastro h1 {
     font-family: 'Lato', sans-serif;
     font-weight: 700;
@@ -138,4 +145,13 @@ div.form-group i {
 
 .size-content {
     margin-top: 20px;
+}
+
+.bg {
+    background-color: var(--primaria) !important;
+
+}
+
+.nav-item > .nav-link > .fa-solid {
+    margin-left: 4px;
 }
