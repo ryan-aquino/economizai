@@ -152,6 +152,57 @@ div.form-group i {
 
 }
 
+.nav-item {
+    font-size: 14pt;
+}
+
 .nav-item > .nav-link > .fa-solid {
     margin-left: 4px;
 }
+
+.nav-item.exit {
+    margin-left: 5px;
+}
+
+.container, .container-fluid {
+    max-height: calc(100% - 56px);
+}
+
+.card {
+    border: 1px solid var(--sucesso);
+    border-radius: 20px;
+    background-color: var(--primaria);
+    color: var(--primaria-texto);
+}
+
+.card .card-title {
+    font-size: 24pt;
+    display: block;
+    width: 100%;
+    text-align: end;
+}
+
+.card .valor {
+    color: var(--primaria-texto);
+    font-size: 28pt;
+    display: block;
+    width: 100%;
+    text-align: end;
+}
+
+.card.saldo .card-title {
+    color: var(--info);
+}
+
+.card.receitas .card-title {
+    color: var(--sucesso);
+}
+
+.card.despesas .card-title {
+    color: var(--erro);
+}
+
+.card.limite .card-title {
+    color: var(--alerta);
+}
+

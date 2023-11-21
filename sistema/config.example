@@ -1,5 +1,6 @@
 module.exports = {
     port: 3000,
+    cookieName: '_fgp',
     database: {
         host: 'localhost',
         user: 'root',

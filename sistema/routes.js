@@ -6,6 +6,7 @@ const categoriaController = require('./controllers/categoriaController');
 module.exports = (app) => {
     app.get('/', usuarioController.indexGet);
     app.post('/', usuarioController.indexPost);
+    app.get('/logoff', usuarioController.logoffGet);
     app.get('/cadastro', usuarioController.cadastroGet);
     app.post('/cadastro', usuarioController.cadastroPost);
     app.get('/inicio', usuarioController.inicioGet);

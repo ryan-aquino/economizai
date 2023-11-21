@@ -1,12 +1,12 @@
 const usuarioHandler = require('../handlers/usuarioHandler')();
 const { criptografar, descriptografar } = require('../shared/cryptograph');
-const { chave, maxAge } = require('../config')
+const { chave, maxAge, cookieName } = require('../config')
 
 module.exports = {
 
     indexGet: async (req, res) => {
         try {
-            if(req.cookies['_fgp'])
+            if(req.cookies[cookieName])
                return res.redirect('/inicio')
 
            return res.render('login', { enabled: false });
@@ -22,7 +22,7 @@ module.exports = {
             const usuario = await usuarioHandler.login(req.body);
 
             if(usuario.valid) {
-                res.cookie('_fgp', criptografar(usuario.response.id.toString(), chave), { maxAge });
+                res.cookie(cookieName, criptografar(usuario.response.id.toString(), chave), { maxAge });
                 return res.redirect('/inicio');
             }
 
@@ -33,6 +33,16 @@ module.exports = {
         } catch (error) {
             console.error('Erro ao processar login:', error);
             res.status(500).send(error.messages);
+        }
+    },
+
+    logoffGet: async (req, res) => {
+        try {
+            res.clearCookie(cookieName);
+            return res.redirect('/');
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Erro interno do servidor');
         }
     },
 
@@ -68,18 +78,18 @@ module.exports = {
     },
 
     inicioGet: async (req, res) => {
-        if(!req.cookies['_fgp'])
+        if(!req.cookies[cookieName])
             return res.redirect('/')
 
-        const id = descriptografar(req.cookies['_fgp'], chave)
+        const id = descriptografar(req.cookies[cookieName], chave)
         return res.render('inicio')
     },
     
     perfilGet: async (req, res) => {
-        if(!req.cookies['_fgp'])
+        if(!req.cookies[cookieName])
             return res.redirect('/')
 
-        const id = descriptografar(req.cookies['_fgp'], chave)
+        const id = descriptografar(req.cookies[cookieName], chave)
         return res.render('perfil')
     },
     
