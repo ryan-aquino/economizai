@@ -7,6 +7,10 @@
         color: var(--primaria-texto);
         font-size: 20pt;
     }
+
+    h2.no-info {
+        font-size: 20pt;
+    }
 }
 
 @media (max-width: 767.98px) { }

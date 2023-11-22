@@ -18,5 +18,7 @@ module.exports = (app) => {
     app.get('/historico', historicoController.historicoGet);
 
     app.get('/categoria', categoriaController.categoriaGet);
+    app.post('/categoria', categoriaController.categoriaPost);
+    app.delete('/categoria/:id', categoriaController.categoriaDelete);
 
 }

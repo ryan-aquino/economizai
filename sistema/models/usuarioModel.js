@@ -1,19 +1,5 @@
 const Joi = require('joi');
 
-const databaseSchema = Joi.object({
-    nome: Joi.string()
-        .min(3)
-        .max(120)
-        .required(),
-
-    senha: Joi.required(),
-
-    email: Joi.string()
-        .email()
-        .required()
-}).options({abortEarly : false});
-
-
 const novoSchema = Joi.object({
     nome: Joi.string()
         .min(3)
@@ -57,7 +43,6 @@ const loginSchema = Joi.object({
 
 
 module.exports = {
-    databaseSchema,
     novoSchema,
     loginSchema
 };
