@@ -1,11 +1,104 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-    <%-include('layout/_header', { siteTitle: 'Economizai - Categoria' }) %>
-    <%-include('layout/_css') %>
+    <%- include('layout/_header', { siteTitle: 'Economizai - Categoria' }) %>
+    <%- include('layout/_css') %>
 </head>
 <body>
-  <%-include('components/menu', {route:'categoria'}) %>
+<%- include('components/menu', {route:'categoria'}) %>
+<main class="container-fluid">
+    <div class="main-center">
+        <div class="pl-5 pr-5 pt-5 pb-2">
+            <table id="categorias" class="display responsive" style="width:100%">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>NOME</th>
+                    <th>COR</th>
+                    <th>DATA DE CADASTRO</th>
+                    <th>AÇÕES</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Trabalho</td>
+                    <td><input value="#FFFFFF" type="color" disabled/></td>
+                    <td>2011-04-25</td>
+                    <td>
+                        <button class="btn btn-action"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="btn btn-action"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row p-3 d-flex justify-content-center">
+            <button type="submit" class="btn btn-secondary btn-second add-btn" data-toggle="modal"
+                    data-target="#adicionarModal">
+                <i class="fa-solid fa-circle-plus"></i>&nbsp; Adicionar
+            </button>
+        </div>
+    </div>
+</main>
+
+
+<div class="modal fade" id="adicionarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-circle-plus"></i>&nbsp; Nova
+                    Movimentação</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><span class="fa-solid fa-table-cells-large"></span></div>
+                        </div>
+                        <input type="text" class="form-control" name="nome" id="nome"
+                               placeholder="Digite o nome para a categoria">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="nome">Cor:</label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+
+                            <div class="input-group-text"><span class="fa-solid fa-palette"></span></div>
+                        </div>
+                        <input type="color" class="form-control" name="cor" id="cor"
+                               placeholder="Digite o nome para a categoria">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-second btn-secondary w-50">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
-<%-include('layout/_script') %>
+<%- include('layout/_script') %>
+<script>
+    $(document).ready(() => {
+        $(`#categorias`).DataTable({
+            "lengthChange": false,
+            "columnDefs": [
+                {"width": "10%", "targets": 0},
+                {"width": "40%", "targets": 1},
+                {"width": "20%", "targets": 2},
+                {"width": "20%", "targets": 3},
+                {"width": "10%", "targets": 4}
+            ],
+            language: {
+                url: 'js/pt-BR.json',
+            },
+        });
+    })
+</script>
 </html>
