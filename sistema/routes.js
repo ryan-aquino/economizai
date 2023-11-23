@@ -19,6 +19,7 @@ module.exports = (app) => {
 
     app.get('/categoria', categoriaController.categoriaGet);
     app.post('/categoria', categoriaController.categoriaPost);
+    app.put('/categoria/:id', categoriaController.categoriaPut);
     app.delete('/categoria/:id', categoriaController.categoriaDelete);
 
 }

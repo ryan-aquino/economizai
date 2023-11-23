@@ -40,21 +40,21 @@ module.exports = () => ({
         return response(false, 500,"Houve um erro ao tentar inserir uma categoria");
     },
 
-    atualizarCategoria: async (data, userId) => {
-        const categoriaExistente = await categoriaRepository.obterCategoriaPorId(data.id);
+    atualizarCategoria: async (data, categoriaId, userId) => {
 
-        if (!categoriaExistente || categoriaExistente.UsuarioId !== userId) {
-            return response(false, 404, "Categoria não encontrada");
-        }
+        const { error, value } = categoriaModel.atualizarSchema.validate({ ...data, id: categoriaId }, { messages });
 
-        const { error, value } = categoriaModel.atualizarSchema.validate(data, { messages });
-
-        if (error) {
+        if(error)
             return response(false, 400, error.message);
-        }
 
-        const { nome, cor } = value;
-        const categoriaAtualizada = await categoriaRepository.atualizarCategoria(data.id, nome, cor);
+        const { id, nome, cor } = value;
+
+        const categoriaExistente = await categoriaRepository.obterCategoriaPorId(id);
+
+        if (!categoriaExistente || categoriaExistente.UsuarioId != userId)
+            return response(false, 404, "Categoria não encontrada");
+
+        const categoriaAtualizada = await categoriaRepository.atualizarCategoria(id, nome, cor);
 
         if (categoriaAtualizada) {
             return response(!!categoriaAtualizada, 200, "");

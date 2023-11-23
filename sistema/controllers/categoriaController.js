@@ -36,6 +36,18 @@ module.exports = {
         return res.status(response.status).json({message: response.message || response.response})
     },
 
+    categoriaPut: async (req, res) => {
+        if (!req.cookies[cookieName])
+            return res.redirect('/')
+
+        const id = descriptografar(req.cookies[cookieName], chave)
+
+        validateId(id, res)
+
+        const response = await categoriaHandler.atualizarCategoria(req.body, req.params.id, id)
+        return res.status(response.status).json({message: response.message || response.response})
+    },
+
     categoriaDelete: async (req, res) => {
         if (!req.cookies[cookieName])
             return res.redirect('/')

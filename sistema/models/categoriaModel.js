@@ -18,6 +18,11 @@ const novoSchema = Joi.object({
 }).options({abortEarly : false});
 
 const atualizarSchema = Joi.object({
+
+    id:Joi.number()
+        .integer()
+        .required(),
+
     nome: Joi.string()
         .min(3)
         .max(150)
