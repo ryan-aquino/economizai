@@ -1,20 +1,12 @@
 const categoriaHandler = require('../handlers/categoriaHandler')()
-const {descriptografar} = require('../shared/cryptograph');
-const {chave, cookieName} = require('../config')
-
-const validateId = (id, res) => {
-    if (typeof (id) != "number" && id <= 0)
-        return res.redirect('/')
-}
+const cookieManager = require('../shared/cookieManager')
 
 module.exports = {
     categoriaGet: async (req, res) => {
-        if (!req.cookies[cookieName])
-            return res.redirect('/')
+        cookieManager.containsCookie(req, res, `/`)
 
-        const id = descriptografar(req.cookies[cookieName], chave)
-
-        validateId(id, res)
+        const id = cookieManager.decodeCookie(req)
+        cookieManager.validateId(res, id)
 
         const response = await categoriaHandler.obterCategorias(id)
 
@@ -25,24 +17,30 @@ module.exports = {
     },
 
     categoriaPost: async (req, res) => {
-        if (!req.cookies[cookieName])
-            return res.redirect('/')
+        cookieManager.containsCookie(req, res, `/`)
 
-        const id = descriptografar(req.cookies[cookieName], chave)
-
-        validateId(id, res)
+        const id = cookieManager.decodeCookie(req)
+        cookieManager.validateId(res, id)
 
         const response = await categoriaHandler.novaCategoria(req.body, id)
         return res.status(response.status).json({message: response.message || response.response})
     },
 
+    categoriaPut: async (req, res) => {
+        cookieManager.containsCookie(req, res, `/`)
+
+        const id = cookieManager.decodeCookie(req)
+        cookieManager.validateId(res, id)
+
+        const response = await categoriaHandler.atualizarCategoria(req.body, req.params.id, id)
+        return res.status(response.status).json({message: response.message || response.response})
+    },
+
     categoriaDelete: async (req, res) => {
-        if (!req.cookies[cookieName])
-            return res.redirect('/')
+        cookieManager.containsCookie(req, res, `/`)
 
-        const id = descriptografar(req.cookies[cookieName], chave)
-
-        validateId(id, res)
+        const id = cookieManager.decodeCookie(req)
+        cookieManager.validateId(res, id)
 
         const response = await categoriaHandler.excluirCategoria(req.params.id, id)
 

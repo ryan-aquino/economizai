@@ -13,7 +13,6 @@
             <table id="categorias" class="display responsive" style="width:100%">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>NOME</th>
                     <th>COR</th>
                     <th>DATA DE CADASTRO</th>
@@ -23,12 +22,12 @@
                 <tbody>
                 <% categorias.forEach((categoria) => { %>
                     <tr>
-                        <td><%=categoria.Id%></td>
                         <td><%=categoria.Nome%></td>
                         <td><input value="<%=categoria.Cor%>" type="color" disabled/></td>
                         <td><%=categoria.DataCadastro.toLocaleDateString("pt-BR")%></td>
                         <td>
-                            <button class="btn btn-action atualizar" data-id="<%=categoria.Id%>"><i class="fa-solid fa-pen-to-square"></i>
+                            <button class="btn btn-action atualizar" data-id="<%=categoria.Id%>" data-nome="<%=categoria.Nome%>" data-cor="<%=categoria.Cor%>" data-toggle="modal"
+                                    data-target="#atualizarModal"><i class="fa-solid fa-pen-to-square"></i>
                             </button>
                             <button class="btn btn-action deletar" data-id="<%=categoria.Id%>"><i class="fa-solid fa-trash"></i></button>
                         </td>
@@ -52,9 +51,9 @@
 
 <div class="modal fade" id="adicionarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form id="categoriaModal" class="modal-content">
+        <form id="addcategoriaModal" class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel">&nbsp; Categoria</h3>
+                <h3 class="modal-title" id="exampleModalLabel">&nbsp; Nova Categoria</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -66,7 +65,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><span class="fa-solid fa-table-cells-large"></span></div>
                         </div>
-                        <input type="text" class="form-control" name="nome" id="nome"
+                        <input type="text" class="form-control" name="add-nome" id="add-nome"
                                placeholder="Digite o nome para a categoria">
                     </div>
                 </div>
@@ -77,13 +76,54 @@
 
                             <div class="input-group-text"><span class="fa-solid fa-palette"></span></div>
                         </div>
-                        <input type="color" class="form-control" name="cor" id="cor"
+                        <input type="color" class="form-control" name="add-cor" id="add-cor"
                                placeholder="Digite o nome para a categoria">
                     </div>
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
                 <button type="submit" class="btn btn-second btn-secondary w-50">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="atualizarModal" tabindex="-1" aria-labelledby="atualizarModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="atualizarCategoriaModal" class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel">&nbsp;Atualizar Categoria</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <input type="hidden" name="at-id" id="at-id">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><span class="fa-solid fa-table-cells-large"></span></div>
+                        </div>
+                        <input type="text" class="form-control" name="at-nome" id="at-nome"
+                               placeholder="Digite o nome para a categoria">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="nome">Cor:</label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+
+                            <div class="input-group-text"><span class="fa-solid fa-palette"></span></div>
+                        </div>
+                        <input type="color" class="form-control" name="at-cor" id="at-cor"
+                               placeholder="Digite o nome para a categoria">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="submit" class="btn btn-second btn-secondary w-50">Atualizar</button>
             </div>
         </form>
     </div>
@@ -96,11 +136,10 @@
         $(`#categorias`).DataTable({
             "lengthChange": false,
             "columnDefs": [
-                {"width": "10%", "targets": 0},
-                {"width": "40%", "targets": 1},
+                {"width": "40%", "targets": 0},
+                {"width": "20%", "targets": 1},
                 {"width": "20%", "targets": 2},
-                {"width": "20%", "targets": 3},
-                {"width": "10%", "targets": 4}
+                {"width": "10%", "targets": 3}
             ],
             language: {
                 url: 'js/pt-BR.json',
@@ -108,48 +147,18 @@
         });
 
         const deleteBtns = $('.deletar');
-        const categoriaModal = $('#categoriaModal');
-
-
-        // ## DELETAR ==============================================
-        const deletarCategoria = async (id) => {
-           try {
-               let resultado = await fetch(`/categoria/${id}`, {
-                   method: 'DELETE'
-               })
-
-              if(!resultado.ok) {
-                  alert(`Houve um erro ao tentar deletar a categoria com ID: ${id}!`)
-                  return
-              }
-
-               alert(`Categoria removida com sucesso!`)
-               window.location.reload()
-           }catch (e) {
-               console.log(e)
-               alert(`Houve um erro ao tentar deletar a categoria com ID: ${id}!`)
-           }
-        }
-
-        const deletar = async (id) => {
-            const confirmarDelecao = confirm(`Você tem certeza que deseja remover a categoria com o ID: ${id}`);
-            if(confirmarDelecao)
-                deletarCategoria(id)
-        }
-
-        $(deleteBtns).each((index, btn) => {
-            let id = $(btn).attr(`data-id`);
-            $(btn).click(async (e) => await deletar(id));
-        })
+        const atualizarBtns = $('.atualizar');
+        const addcategoriaModal = $('#addcategoriaModal');
+        const atualizarCategoriaModal = $('#atualizarCategoriaModal');
 
 
         // ## ADICIONAR ==============================================
 
-        $(categoriaModal).submit(async (e) => {
+        $(addcategoriaModal).submit(async (e) => {
             e.preventDefault()
             const data = {
-                nome: $(`input#nome`).val(),
-                cor: $('input#cor').val(),
+                nome: $(`input#add-nome`).val(),
+                cor: $('input#add-cor').val(),
             }
 
             try {
@@ -173,6 +182,88 @@
                 alert(`Houve um erro ao tentar deletar a categoria com ID: ${id}!`)
             }
         })
+
+        // ## ATUALIZAR ==============================================
+
+        const atualizarCategoria = async (id, data) => {
+            try {
+                let resultado = await fetch(`/categoria/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+
+                if(!resultado.ok) {
+                    alert(`Houve um erro ao tentar atualizar a categoria com ID: ${id}!`)
+                    return
+                }
+
+                alert(`Categoria atualizada com sucesso!`)
+                window.location.reload()
+            }catch (e) {
+                console.log(e)
+                alert(`Houve um erro ao tentar atualizar a categoria com ID: ${id}!`)
+            }
+        }
+
+        $(atualizarBtns).each((index, btn) => {
+            let id = $(btn).attr(`data-id`);
+            let nome = $(btn).attr(`data-nome`);
+            let cor = $(btn).attr(`data-cor`);
+
+            $(btn).click(async (e) => {
+                $('#at-id').val(id);
+                $('#at-nome').val(nome);
+                $('#at-cor').val(cor);
+            });
+        })
+
+        $(atualizarCategoriaModal).submit(async (e) => {
+            e.preventDefault()
+            const data = {
+                nome: $(`input#at-nome`).val(),
+                cor: $('input#at-cor').val(),
+            }
+
+            const id = $(`input#at-id`).val();
+
+            atualizarCategoria(id, data)
+        })
+
+        // ## DELETAR ==============================================
+        const deletarCategoria = async (id) => {
+            try {
+                let resultado = await fetch(`/categoria/${id}`, {
+                    method: 'DELETE'
+                })
+
+                if(!resultado.ok) {
+                    alert(`Houve um erro ao tentar deletar a categoria com ID: ${id}!`)
+                    return
+                }
+
+                alert(`Categoria removida com sucesso!`)
+                window.location.reload()
+            }catch (e) {
+                console.log(e)
+                alert(`Houve um erro ao tentar deletar a categoria com ID: ${id}!`)
+            }
+        }
+
+        const deletar = async (id) => {
+            const confirmarDelecao = confirm(`Você tem certeza que deseja remover a categoria com o ID: ${id}`);
+            if(confirmarDelecao)
+                deletarCategoria(id)
+        }
+
+        $(deleteBtns).each((index, btn) => {
+            let id = $(btn).attr(`data-id`);
+            $(btn).click(async (e) => await deletar(id));
+        })
+
+
     })
 </script>
 </html>

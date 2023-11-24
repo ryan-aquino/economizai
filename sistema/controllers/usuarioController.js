@@ -1,6 +1,7 @@
 const usuarioHandler = require('../handlers/usuarioHandler')();
-const { criptografar, descriptografar } = require('../shared/cryptograph');
-const { chave, maxAge, cookieName } = require('../config')
+const categoriasHandler = require('../handlers/categoriaHandler')();
+const cookieManager = require('../shared/cookieManager')
+const { cookieName } = require('../config')
 
 module.exports = {
 
@@ -22,7 +23,7 @@ module.exports = {
             const usuario = await usuarioHandler.login(req.body);
 
             if(usuario.valid) {
-                res.cookie(cookieName, criptografar(usuario.response.id.toString(), chave), { maxAge });
+                cookieManager.createCookie(res, usuario.response.id)
                 return res.redirect('/inicio');
             }
 
@@ -38,8 +39,8 @@ module.exports = {
 
     logoffGet: async (req, res) => {
         try {
-            res.clearCookie(cookieName);
             return res.redirect('/');
+            cookieManager.deleteCookie();
         } catch (error) {
             console.error(error);
             res.status(500).send('Erro interno do servidor');
@@ -78,18 +79,16 @@ module.exports = {
     },
 
     inicioGet: async (req, res) => {
-        if(!req.cookies[cookieName])
-            return res.redirect('/')
+       cookieManager.containsCookie(req, res, '/')
+       let userId = cookieManager.decodeCookie(req)
 
-        const id = descriptografar(req.cookies[cookieName], chave)
-        return res.render('inicio')
+       let result = await categoriasHandler.obterCategorias(userId);
+
+        return res.render('inicio', {  categorias: result.response || []  })
     },
     
     perfilGet: async (req, res) => {
-        if(!req.cookies[cookieName])
-            return res.redirect('/')
-
-        const id = descriptografar(req.cookies[cookieName], chave)
+        cookieManager.containsCookie(req, res, '/')
         return res.render('perfil')
     },
     
