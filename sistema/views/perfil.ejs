@@ -6,22 +6,37 @@
 </head>
 <body>
   <%-include('components/menu', {route:'perfil'}) %>
-  <form>
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputEmail4">Email</label>
-        <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+
+  <div class="container-fluid d-md-flex d-inline">
+    <div class="perfil col-md-4 d-flex flex-column align-items-center justify-content-center">
+      <div class="imagem-perfil mb-5 borda p-2 rounded">
+        <i class="fa-solid fa-user fa-10x" style="color: white"></i>
       </div>
-      <div class="form-group col-md-6">
-        <label for="inputPassword4">Password</label>
-        <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+      <div class="botao-perfil d-flex flex-column">
+        <button type="" class="btn btn-second btn-secondary mb-4">Trocar foto</button>
+        <button type="" class="btn btn-second btn-secondary">Alterar dados</button>
       </div>
     </div>
-    <div class="form-group">
-      <label for="inputName">Nome</label>
-      <input type="text" class="form-control" id="inputName" placeholder="Name">
+    <div class="col-md-8 d-flex flex-column justify-content-center">
+      <form class="cardbase">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputEmail4">Email:</label>
+            <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputPassword4">Password:</label>
+            <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputName">Nome:</label>
+          <input type="text" class="form-control" id="inputName" placeholder="Name">
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
+
 </body>
 <%-include('layout/_script') %>
 </html>
