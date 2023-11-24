@@ -13,7 +13,6 @@
             <table id="categorias" class="display responsive" style="width:100%">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>NOME</th>
                     <th>COR</th>
                     <th>DATA DE CADASTRO</th>
@@ -23,7 +22,6 @@
                 <tbody>
                 <% categorias.forEach((categoria) => { %>
                     <tr>
-                        <td><%=categoria.Id%></td>
                         <td><%=categoria.Nome%></td>
                         <td><input value="<%=categoria.Cor%>" type="color" disabled/></td>
                         <td><%=categoria.DataCadastro.toLocaleDateString("pt-BR")%></td>
@@ -138,11 +136,10 @@
         $(`#categorias`).DataTable({
             "lengthChange": false,
             "columnDefs": [
-                {"width": "10%", "targets": 0},
-                {"width": "40%", "targets": 1},
+                {"width": "40%", "targets": 0},
+                {"width": "20%", "targets": 1},
                 {"width": "20%", "targets": 2},
-                {"width": "20%", "targets": 3},
-                {"width": "10%", "targets": 4}
+                {"width": "10%", "targets": 3}
             ],
             language: {
                 url: 'js/pt-BR.json',
