@@ -1,4 +1,5 @@
 const usuarioHandler = require('../handlers/usuarioHandler')();
+const financasHandler = require('../handlers/financasHandler')();
 const categoriasHandler = require('../handlers/categoriaHandler')();
 const cookieManager = require('../shared/cookieManager')
 const { cookieName } = require('../config')
@@ -47,7 +48,6 @@ module.exports = {
         }
     },
 
-
     cadastroGet: async (req, res) => {
 
         try {
@@ -80,11 +80,24 @@ module.exports = {
 
     inicioGet: async (req, res) => {
        cookieManager.containsCookie(req, res, '/')
-       let userId = cookieManager.decodeCookie(req)
+       const userId = cookieManager.decodeCookie(req)
 
-       let result = await categoriasHandler.obterCategorias(userId);
+       cookieManager.validateId(userId);
 
-        return res.render('inicio', {  categorias: result.response || []  })
+       let actualDate= new Date();
+       let month = req.query.month || (actualDate.getMonth() + 1)
+       let year = req.query.year || actualDate.getFullYear()
+
+       let categoriaResult = await categoriasHandler.obterCategorias(userId);
+       let financaResult = await financasHandler.obterDadosMes(userId, month, year);
+
+        return res.render('inicio', {
+            categorias: categoriaResult.response || [],
+            receitas: financaResult.response.receitas || 0,
+            despesas: financaResult.response.despesas || 0,
+            limite: financaResult.response.limite || 0,
+            saldo: financaResult.response.saldo || 0
+        })
     },
     
     perfilGet: async (req, res) => {

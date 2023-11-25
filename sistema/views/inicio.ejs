@@ -29,7 +29,7 @@
                        </div>
                        <div>
                            <span class="card-title">Saldo</span>
-                           <span class="valor">R$ 999999,00</span>
+                           <span class="valor"><%= saldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); %></span>
                        </div>
                    </div>
                </div>
@@ -44,7 +44,7 @@
                        </div>
                        <div>
                            <span class="card-title">Receitas</span>
-                           <span class="valor">R$ 999999,00</span>
+                           <span class="valor"><%= receitas.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); %></span>
                        </div>
                    </div>
                </div>
@@ -59,7 +59,7 @@
                        </div>
                        <div>
                            <span class="card-title">Despesas</span>
-                           <span class="valor">R$ 999999,00</span>
+                           <span class="valor"><%= despesas.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); %></span>
                        </div>
                    </div>
                </div>
@@ -73,8 +73,8 @@
                         </span>
                        </div>
                        <div>
-                           <span class="card-title">Despesas</span>
-                           <span class="valor">R$ 999999,00</span>
+                           <span class="card-title">Limite</span>
+                           <span class="valor"><%= limite.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); %></span>
                        </div>
                    </div>
                </div>
@@ -97,7 +97,7 @@
                       <span aria-hidden="true">&times;</span>
                   </button>
               </div>
-              <div class="modal-body">
+              <div class="modal-body">x
                   <div class="form-group">
                       <label for="tipo">Tipo:</label>
                       <div class="input-group mb-2">
@@ -113,7 +113,7 @@
                           <div class="input-group-prepend">
                               <div class="input-group-text">R$</div>
                           </div>
-                          <input type="text" class="form-control" name="valor" id="valor" placeholder="0,00" data-thousands="." data-decimal="," data-prefix="" >
+                          <input type="text" class="form-control valor" name="valor" id="valor" placeholder="0,00" data-thousands="." data-decimal="," data-prefix="" >
                       </div>
                   </div>
                   <div class="form-group">
@@ -139,33 +139,46 @@
                            <% } %>
                       </div>
                   </div>
-                  <div class="form-group">
-                      <label for="nome">Nome:</label>
-                      <div class="input-group mb-2">
-                          <div class="input-group-prepend">
-                              <div class="input-group-text"><span class="fa-solid fa-table-cells-large"></span></div>
-                          </div>
-                          <input type="text" class="form-control" name="nome" id="nome" placeholder="Digite o nome">
-                      </div>
-                  </div>
+<!--                  <div class="form-group">-->
+<!--                      <label for="nome">Nome:</label>-->
+<!--                      <div class="input-group mb-2">-->
+<!--                          <div class="input-group-prepend">-->
+<!--                              <div class="input-group-text"><span class="fa-solid fa-table-cells-large"></span></div>-->
+<!--                          </div>-->
+<!--                          <input type="text" class="form-control" name="nome" id="nome" placeholder="Digite o nome">-->
+<!--                      </div>-->
+<!--                  </div>-->
               </div>
               <div class="modal-footer d-flex justify-content-center">
                   <button type="button" class="btn btn-second btn-secondary w-50">Salvar</button>
               </div>
           </div>
+
+          <input type="text" id="currency" />
       </div>
   </div>
 </body>
 <%-include('layout/_script') %>
 <script>
-    $(document).ready(() => {
+    $(function() {
+        $('#valor').maskMoney();
+    })
+</script>
+<script>
+    $(function() {
         const prevButton = document.getElementById('prevButton');
         const nextButton = document.getElementById('nextButton');
         const monthYearDisplay = document.getElementById('monthYearDisplay');
         const hiddenDateInput = document.getElementById('hiddenDate');
 
-        let currentMonth = new Date().getMonth();  // Janeiro é 0
-        let currentYear = new Date().getFullYear();
+        // Obter os valores do mês e do ano da URL, se presentes
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlMonth = urlParams.get('month');
+        const urlYear = urlParams.get('year');
+
+        // Definir o mês e o ano atuais se não estiverem presentes na URL
+        let currentMonth = urlMonth ? parseInt(urlMonth, 10) - 1 : new Date().getMonth();
+        let currentYear = urlYear ? parseInt(urlYear, 10) : new Date().getFullYear();
 
         function updateDisplay() {
             const monthNames = [
@@ -186,6 +199,7 @@
 
             monthYearDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
             hiddenDateInput.value = `${formattedYear}-${formattedMonth}`;
+
         }
 
         // Avançar para o próximo mês
@@ -196,6 +210,9 @@
                 currentYear++;
             }
             updateDisplay();
+
+            const newUrl = `?month=${currentMonth + 1}&year=${currentYear}`;
+            window.location.href = newUrl;
         }
 
         // Voltar para o mês anterior
@@ -206,6 +223,10 @@
                 currentYear--;
             }
             updateDisplay();
+
+            // Redirecionar para a nova URL
+            const newUrl = `?month=${currentMonth + 1}&year=${currentYear}`;
+            window.location.href = newUrl;
         }
 
         // Adicionar ouvintes de eventos aos botões
@@ -214,8 +235,6 @@
 
         // Exibir o mês e o ano iniciais
         updateDisplay();
-
-        $("#valor").maskMoney();
 
     })
 </script>
