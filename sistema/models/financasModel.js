@@ -1,38 +1,40 @@
 const Joi = require('joi');
 
 const novoSchema = Joi.object({
-    CategoriaId: Joi.number()
+    categoriaId: Joi.number()
         .integer()
         .required(),
 
-    UsuarioId: Joi.number()
+    usuarioId: Joi.number()
         .integer()
         .required(),
 
-    Valor: Joi.number()
+    tipo: Joi.string(),
+
+    valor: Joi.number()
         .precision(2)
         .required(),
 
-    DataCadastro: Joi.date()
+    dataCadastro: Joi.date()
         .iso()
         .required()
 
 }).options({ abortEarly: false });
 
 const atualizarSchema = Joi.object({
-    Id: Joi.number()
+    id: Joi.number()
         .integer()
         .required(),
 
-    CategoriaId: Joi.number()
+    categoriaId: Joi.number()
         .integer()
         .required(),
 
-    UsuarioId: Joi.number()
+    usuarioId: Joi.number()
         .integer()
         .required(),
 
-    Valor: Joi.number()
+    valor: Joi.number()
         .precision(2)
         .required(),
 

@@ -21,7 +21,7 @@ module.exports = () => {
         const connection = await pool.getConnection();
 
         try {
-            const query = 'INSERT INTO Receitas (CategoriaId, UsuarioId, Valor, DataCadastro) VALUES (?, ?, ?, ?)';
+            const query = 'INSERT INTO Despesas (CategoriaId, UsuarioId, Valor, DataCadastro) VALUES (?, ?, ?, ?)';
             const [result] = await connection.query(query, [categoriaId, usuarioId, valor, dataCadastro]);
             return result.insertId;
         } finally {
