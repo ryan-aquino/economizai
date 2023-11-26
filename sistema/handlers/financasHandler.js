@@ -2,6 +2,7 @@ const financasRepository = require('../repository/financaRepository')();
 const financaModel = require('../models/financasModel');
 const {messages} = require('joi-translation-pt-br');
 const response = require('../shared/handlerResponse')
+const dateManager = require('../shared/dateManager')
 
 
 const validationReceita = (tipo) => {
@@ -46,9 +47,9 @@ module.exports = () => ({
         let financaAdicionada = 0;
 
         if(validationReceita(tipo))
-           financaAdicionada = await financasRepository.adicionarReceita(categoriaId, usuarioId, valor, dataCadastro);
+           financaAdicionada = await financasRepository.adicionarReceita(categoriaId, usuarioId, valor,dateManager.adHoras(dataCadastro, 3) );
         else
-            financaAdicionada = await financasRepository.adicionarDespesa(categoriaId, usuarioId, valor, dataCadastro);
+            financaAdicionada = await financasRepository.adicionarDespesa(categoriaId, usuarioId, valor, dateManager.adHoras(dataCadastro, 3));
 
         if (financaAdicionada)
             return response(!!financaAdicionada, 201, "");
