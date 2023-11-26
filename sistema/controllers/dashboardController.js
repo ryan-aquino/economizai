@@ -1,12 +1,13 @@
-const { criptografar, descriptografar } = require('../shared/cryptograph');
-const { chave, maxAge, cookieName} = require('../config')
+const cookieManager = require("../shared/cookieManager");
 
 module.exports = { 
     dashboardGet: async (req, res) => {
-        if(!req.cookies[cookieName])
-            return res.redirect('/')
-    
-        const id = descriptografar(req.cookies['_fgp'], chave)
+        cookieManager.containsCookie(req, res, '/')
+
+        const userId = cookieManager.decodeCookie(req)
+
+        cookieManager.validateId(userId);
+
         return res.render('dashboard')
     },
     
