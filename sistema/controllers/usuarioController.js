@@ -98,7 +98,6 @@ module.exports = {
                 categorias: categoriaResult.response || [],
                 receitas: financaResult.response.receitas || 0,
                 despesas: financaResult.response.despesas || 0,
-                limite: financaResult.response.limite || 0,
                 saldo: financaResult.response.saldo || 0
             })
         } catch (error) {

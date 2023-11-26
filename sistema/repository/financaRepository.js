@@ -29,17 +29,6 @@ module.exports = () => {
         }
     }
 
-    const adicionarLimite = async (usuarioId, valor, dataCadastro) => {
-        const connection = await pool.getConnection();
-
-        try {
-            const query = 'INSERT INTO LimiteDespesas (UsuarioId, Valor, DataCadastro) VALUES (?, ?, ?, ?)';
-            const [result] = await connection.query(query, [usuarioId, valor, dataCadastro]);
-            return result.insertId;
-        } finally {
-            connection.release();
-        }
-    }
 
     const obterTodasReceitasPorMes = async (usuarioId, month, year) => {
         const connection = await pool.getConnection();
@@ -62,30 +51,6 @@ module.exports = () => {
         try {
             const query = 'SELECT * FROM Despesas WHERE UsuarioId = ?  AND YEAR(DataCadastro) = ? AND MONTH(DataCadastro) = ?';
             const [rows] = await connection.query(query, [usuarioId, year, month]);
-            return rows;
-        } finally {
-            connection.release();
-        }
-    }
-
-    const obterTodosLimitesPorMes = async (usuarioId, month, year) => {
-        const connection = await pool.getConnection();
-
-        try {
-            const query = 'SELECT * FROM LimiteDespesas WHERE UsuarioId = ?  AND YEAR(DataCadastro) = ? AND MONTH(DataCadastro) = ?';
-            const [rows] = await connection.query(query, [usuarioId, year, month]);
-            return rows;
-        } finally {
-            connection.release();
-        }
-    }
-
-    const obterTodosLimites = async (usuarioId) => {
-        const connection = await pool.getConnection();
-
-        try {
-            const query = 'SELECT * FROM LimiteDespesas WHERE UsuarioId = ?';
-            const [rows] = await connection.query(query, [usuarioId]);
             return rows;
         } finally {
             connection.release();
@@ -133,11 +98,8 @@ module.exports = () => {
     return {
         adicionarReceita,
         adicionarDespesa,
-        adicionarLimite,
         obterTodasReceitasPorMes,
         obterTodasDespesasPorMes,
-        obterTodosLimitesPorMes,
-        obterTodosLimites,
         atualizarReceita,
         atualizarDespesa
     }
