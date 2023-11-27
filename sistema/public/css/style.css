@@ -407,6 +407,6 @@ h2.no-info {
     color: var(--primaria-texto);
 }
 
-.borda {
+.borda, .line > .form-control {
     border: solid 2px var(--segundo);
 }

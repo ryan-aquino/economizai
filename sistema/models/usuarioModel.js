@@ -30,6 +30,16 @@ const novoSchema = Joi.object({
   .with('senha', 'confirmacaoSenha')
     .with('email', 'confirmacaoEmail');
 
+const atualizarSchema = Joi.object({
+    nome: Joi.string()
+        .min(3)
+        .max(120)
+        .required(),
+
+    email: Joi.string()
+              .email()
+              .required(),
+}).options({abortEarly : false})
 
 const loginSchema = Joi.object({
     email: Joi.string()
@@ -44,5 +54,6 @@ const loginSchema = Joi.object({
 
 module.exports = {
     novoSchema,
+    atualizarSchema,
     loginSchema
 };

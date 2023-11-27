@@ -13,25 +13,33 @@
         <i class="fa-solid fa-user fa-10x" style="color: white"></i>
       </div>
       <div class="botao-perfil d-flex flex-column">
-        <button type="" class="btn btn-second btn-secondary mb-4">Trocar foto</button>
-        <button type="" class="btn btn-second btn-secondary">Alterar dados</button>
+        <button type="" id="alterarSenha" class="btn btn-second btn-secondary mb-4">Alterar senha</button>
+        <button type="" id="alterarDados" class="btn btn-second btn-secondary mb-4">Alterar dados</button>
+        <button type="" id="salvar" class="btn btn-second btn-secondary">Salvar</button> 
       </div>
     </div>
     <div class="col-md-8 d-flex flex-column justify-content-center">
       <form class="cardbase">
+        <input type="hidden" value="<%=usuario.Id %>" id="Id">
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="inputEmail4">Email:</label>
-            <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+            <div class="line form-group">
+              <label for="inputEmail">Email:</label>
+              <input disabled value="<%=usuario.Email %>" type="email" class="form-control" id="email" placeholder="Email">
+            </div>
           </div>
           <div class="form-group col-md-6">
-            <label for="inputPassword4">Password:</label>
-            <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            <div class="line form-group">
+              <label for="inputPassword">Senha:</label>
+              <input disabled type="password" class="form-control" id="senha" placeholder="Senha">
+            </div>
           </div>
         </div>
         <div class="form-group">
-          <label for="inputName">Nome:</label>
-          <input type="text" class="form-control" id="inputName" placeholder="Name">
+          <div class="line form-group">
+            <label for="inputName">Nome:</label>
+            <input disabled value="<%=usuario.Nome %>" type="text" class="form-control" id="nome" placeholder="Nome">
+          </div>
         </div>
       </form>
     </div>
@@ -39,4 +47,64 @@
 
 </body>
 <%-include('layout/_script') %>
+<script>
+  $(function(){
+    const alterarDados = $('#alterarDados')
+    const nome = $('#nome') 
+    const email = $('#email') 
+    const senha = $('#senha')
+    const Id = $('#Id')
+
+    alterarDados.click(()=>{
+      nome.removeAttr('disabled')
+      email.removeAttr('disabled')
+
+      senha.attr('disabled', true)
+    })
+
+    const alterarSenha = $('#alterarSenha')
+    alterarSenha.click(()=> {
+      senha.removeAttr('disabled')
+
+      nome.attr('disabled', true)
+      email.attr('disabled', true)
+    })
+
+    const salvar = $('#salvar')
+    salvar.click(async ()=> {
+      const atualizarUsuario = async (id, data) => {
+            try {
+                let resultado = await fetch(`/perfil/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+
+                if(!resultado.ok) {
+                    alert(`Houve um erro ao tentar atualizar o usuario com ID: ${id}!`)
+                    return
+                }
+
+                alert(`Usuario atualizado com sucesso!`)
+                window.location.reload()
+            }catch (e) {
+                console.log(e)
+                alert(`Houve um erro ao tentar atualizar o usuario com ID: ${id}!`)
+            }
+        }
+    
+    
+      const data = {
+        email: email.val(),
+        nome: nome.val()
+      }
+      await atualizarUsuario(Id.val(),data) 
+    })
+
+  })
+
+
+</script>
 </html>

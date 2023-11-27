@@ -14,9 +14,11 @@ module.exports = (app) => {
     app.post('/cadastro', usuarioController.cadastroPost);
     app.get('/inicio', usuarioController.inicioGet);
     app.get('/perfil', usuarioController.perfilGet);
+    app.put('/perfil/:id', usuarioController.perfilPut);
+
 
     // DASHBOARD
-    app.get('/dashboard', dashboardController.dashboardGet);
+    app.post('/dashboard', dashboardController.dashboardGet);
 
     // HISTORICO
     app.get('/historico', historicoController.historicoGet);

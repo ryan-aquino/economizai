@@ -109,11 +109,33 @@ module.exports = {
     perfilGet: async (req, res) => {
         try {
             cookieManager.containsCookie(req, res, '/')
-            return res.render('perfil')
+            const userId = cookieManager.decodeCookie(req)
+
+            cookieManager.validateId(userId);
+            const resultado = await usuarioHandler.obterPorId(userId)
+
+            if(!resultado.valid) {
+                cookieManager.deleteCookie(res)
+                return res.redirect('/')
+            }
+
+            return res.render('perfil', {usuario: resultado.response})
         } catch (error) {
             console.error('Erro ao processar login:', error);
             res.status(500).send(error.messages);
         }
     },
 
+    perfilPut: async (req, res) => {
+        try {
+            
+
+            const resultado = await usuarioHandler.atualizarUsuario(req.body, req.params.id || 0)
+
+            return res.status(resultado.status).json(resultado.message)
+        } catch (error) {
+            console.error('Erro ao processar login:', error);
+            res.status(500).send(error.messages);
+        }
+    }
 }

@@ -28,10 +28,48 @@ module.exports = () => {
         }
     }
 
+    const buscarUsuarioId = async (usuarioId) => {
+        const connection = await pool.getConnection();
+        try {
+            const query = 'SELECT * FROM Usuarios WHERE Id = ?';
+            const [rows] = await connection.query(query, [usuarioId]);
+            return rows[0] || null;
+        } finally {
+            connection.release();
+        }
+    };
+
+    const atualizarUsuario = async (id, nome, email) => {
+        const connection = await pool.getConnection();
+
+        try {
+            const query = 'UPDATE Usuarios SET Nome = ?, Email = ? WHERE Id = ?';
+            const [result] = await connection.query(query, [nome, email, id]);
+            return result.affectedRows > 0; // Verifica se a categoria foi atualizada com sucesso
+        } finally {
+            connection.release();
+        }
+    }
+
+    const atualizarSenha = async (id, senha) => {
+        const connection = await pool.getConnection();
+
+        try {
+            const query = 'UPDATE Usuarios SET Senha = ? WHERE Id = ?';
+            const [result] = await connection.query(query, [senha, id]);
+            return result.affectedRows > 0; // Verifica se a categoria foi atualizada com sucesso
+        } finally {
+            connection.release();
+        }
+    }
+
 
     return {
         buscarUsuarioEmail,
-        adicionarUsuario
+        buscarUsuarioId,
+        adicionarUsuario,
+        atualizarUsuario,
+        atualizarSenha
     }
 
 }

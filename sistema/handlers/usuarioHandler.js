@@ -50,4 +50,39 @@ module.exports = () => ({
         return response(true, 200, "", { id: usuario.Id });
 
     },
+
+    obterPorId: async (userId) => {
+        const usuario = await usuarioRepository.buscarUsuarioId(userId)
+
+        if(!usuario)
+            return response(false, 404, 'Usuario não encontrado.')
+
+        return response(true, 200, '', usuario)
+    },
+    
+    atualizarUsuario: async (data, userId) => {
+        const { error, value } = usuarioModel.atualizarSchema.validate(data, { messages })
+
+        if(error)
+           return response(false, 400, error.message);
+
+        const {nome, email} = value
+        const usuario = await usuarioRepository.buscarUsuarioId(userId)
+
+        if(!usuario)
+            return response(false, 404, 'Usuario não encontrado.')
+
+        const resultado = await usuarioRepository.atualizarUsuario(userId, nome, email)
+        
+        if(resultado <= 0)
+            return response(false, 500, 'Erro ao tentar atualizar o usuario.')
+
+        return response(true, 200, 'Usuario atualizado com sucesso.')
+    },
+
+    atualizarSenha: async (data, userId) => {
+        
+        
+    }
+
 })
