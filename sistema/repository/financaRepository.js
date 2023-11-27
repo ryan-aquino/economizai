@@ -34,7 +34,17 @@ module.exports = () => {
         const connection = await pool.getConnection();
 
         try {
-            const query = 'SELECT * FROM Receitas WHERE UsuarioId = ? AND YEAR(DataCadastro) = ? AND MONTH(DataCadastro) = ?';
+            const query = `SELECT Receitas.Id as Id,
+            Receitas.CategoriaId as CategoriaId,
+            Receitas.UsuarioId as UsuarioId,
+            Receitas.Valor as Valor,
+            Receitas.Nome as Nome,
+            Receitas.DataCadastro as DataCadastro,
+            Receitas.DataAtualizacao as DataAtualizacao,
+            Categorias.Nome as CategoriaNome
+            FROM Receitas
+            JOIN Categorias ON Receitas.CategoriaId = Categorias.Id
+            WHERE Receitas.UsuarioId = ? AND YEAR(Receitas.DataCadastro) = ? AND MONTH(Receitas.DataCadastro) = ?`;
             const [rows] = await connection.query(query, [usuarioId, year, month]);
             return rows;
         } catch (error) {
@@ -49,7 +59,17 @@ module.exports = () => {
         const connection = await pool.getConnection();
 
         try {
-            const query = 'SELECT * FROM Despesas WHERE UsuarioId = ?  AND YEAR(DataCadastro) = ? AND MONTH(DataCadastro) = ?';
+            const query = `SELECT Despesas.Id as Id,
+            Despesas.CategoriaId as CategoriaId,
+            Despesas.UsuarioId as UsuarioId,
+            Despesas.Valor as Valor,
+            Despesas.Nome as Nome,
+            Despesas.DataCadastro as DataCadastro,
+            Despesas.DataAtualizacao as DataAtualizacao,
+            Categorias.Nome as CategoriaNome
+            FROM Despesas
+            JOIN Categorias ON Despesas.CategoriaId = Categorias.Id
+            WHERE Despesas.UsuarioId = ? AND YEAR(Despesas.DataCadastro) = ? AND MONTH(Despesas.DataCadastro) = ?`;
             const [rows] = await connection.query(query, [usuarioId, year, month]);
             return rows;
         } finally {
