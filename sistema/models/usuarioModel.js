@@ -39,6 +39,10 @@ const atualizarSchema = Joi.object({
     email: Joi.string()
               .email()
               .required(),
+
+    senha: Joi.string()
+             .allow('')
+    
 }).options({abortEarly : false})
 
 const loginSchema = Joi.object({
@@ -50,7 +54,6 @@ const loginSchema = Joi.object({
         .required()
 
 }).options({abortEarly : false});
-
 
 module.exports = {
     novoSchema,

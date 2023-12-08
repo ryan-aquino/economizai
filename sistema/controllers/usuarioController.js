@@ -128,13 +128,15 @@ module.exports = {
 
     perfilPut: async (req, res) => {
         try {
-            
+            cookieManager.containsCookie(req, res, '/')
+            const userId = cookieManager.decodeCookie(req)
 
-            const resultado = await usuarioHandler.atualizarUsuario(req.body, req.params.id || 0)
+            cookieManager.validateId(userId);
+            const resultado = await usuarioHandler.atualizarUsuario(req.body, userId)
 
             return res.status(resultado.status).json(resultado.message)
         } catch (error) {
-            console.error('Erro ao processar login:', error);
+            console.error('Erro ao processar:', error);
             res.status(500).send(error.messages);
         }
     }
