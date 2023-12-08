@@ -40,13 +40,14 @@ module.exports = () => ({
         if (error)
             return response(false, 400, error.message);
 
-        const {tipo, categoriaId, valor, dataCadastro, usuarioId} = value;
+        const {tipo, categoriaId, valor, dataCadastro, usuarioId, nome} = value;
         let financaAdicionada = 0;
+        console.log(dataCadastro)
 
         if(validationReceita(tipo))
-           financaAdicionada = await financasRepository.adicionarReceita(categoriaId, usuarioId, valor,dateManager.adHoras(dataCadastro, 3) );
+           financaAdicionada = await financasRepository.adicionarReceita(categoriaId, usuarioId, nome, valor, dateManager.adHoras(dataCadastro, 3) );
         else
-            financaAdicionada = await financasRepository.adicionarDespesa(categoriaId, usuarioId, valor, dateManager.adHoras(dataCadastro, 3));
+            financaAdicionada = await financasRepository.adicionarDespesa(categoriaId, usuarioId, nome, valor, dateManager.adHoras(dataCadastro, 3));
 
         if (financaAdicionada)
             return response(!!financaAdicionada, 201, "");

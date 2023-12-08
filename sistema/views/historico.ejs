@@ -18,52 +18,6 @@
     </div>
 </div>
 <div class="row p-5">
-    <div class="col-lg-4 col-md-12 mb-4">
-        <div class="card saldo">
-            <div class="card-body d-flex justify-content-between">
-                <div class="icon d-flex justify-content-center align-items-center">
-                 <span class="d-none d-md-block">
-                     <i class="fa-solid fa-wallet" style="font-size: 60pt"></i>
-                 </span>
-                </div>
-                <div>
-                    <span class="card-title">Saldo</span>
-                    <span class="valor">R$ 999999,00</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-12 mb-4">
-        <div class="card receitas">
-            <div class="card-body d-flex justify-content-between">
-                <div class="icon d-flex justify-content-center align-items-center">
-                 <span class="d-none d-md-block">
-                     <i class="fa-solid fa-money-bill-trend-up" style="font-size: 60pt"></i>
-                 </span>
-                </div>
-                <div>
-                    <span class="card-title">Receitas</span>
-                    <span class="valor">R$ 999999,00</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-12 mb-4">
-        <div class="card despesas">
-            <div class="card-body d-flex justify-content-between">
-                <div class="icon d-flex justify-content-center align-items-center">
-                 <span class="d-none d-md-block">
-                   <i class="fa-solid fa-money-bill-trend-up fa-rotate-180" style="font-size: 60pt"></i>
-                 </span>
-                </div>
-                <div>
-                    <span class="card-title">Despesas</span>
-                    <span class="valor">R$ 999999,00</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="col-12">    
         <div class="main-center">
             <div class="pl-5 pr-5 pt-5 pb-2">
@@ -79,7 +33,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <% dados.forEach((dado) => { %>
+                        <% dados.historico.forEach((dado) => { %>
                             <tr>
                                <td>
                                 <%= dado.Nome %>
@@ -88,16 +42,17 @@
                                 <%= dado.CategoriaNome %>
                                </td>
                                <td>
-                                <%= dado.DataCadastro%>
+                                <%= new Date(dado.DataCadastro).toLocaleDateString("pt-BR")%>
                                </td>
                                <td>
-                                <%= dado.Valor%>
+                                <%= dado.Valor.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})%>
                                </td>
                                <td>
-                                <button class="btn btn-action atualizar" data-id="<%=dados.Id%>" data-nome="<%=dados.Nome%>" data-cor="<%=dados.Cor%>" data-toggle="modal"
+                                <button class="btn btn-action atualizar" data-id="<%=dado.Id%>" data-nome="<%=dado.Nome%>" data-categoriaId="<%=dado.CategoriaId%>" data-toggle="modal"
+                                    data-dataCadastro="<%=dado.DataCadastro%>"  data-tipo="<%=dado.Tipo%>"  data-valor="<%=dado.Valor%>"
                                     data-target="#atualizarModal"><i class="fa-solid fa-pen-to-square"></i>
                             </button>
-                            <button class="btn btn-action deletar" data-id="<%=dados.Id%>"><i class="fa-solid fa-trash"></i></button>
+                            <button class="btn btn-action deletar" data-id="<%=dado.Id%>"><i class="fa-solid fa-trash"></i></button>
                                </td>
                             </tr>
                         <% }) %>
@@ -107,30 +62,25 @@
                         <h2 class="no-info">Não há categorias cadastradas</h2>
                     <% } %>
             </div>
-
-            <div class="row p-3 d-flex justify-content-center">
-                <button type="submit" class="btn btn-secondary btn-second add-btn" data-toggle="modal"
-                        data-target="#adicionarModal">
-                    <i class="fa-solid fa-circle-plus"></i>&nbsp; Adicionar
-                </button>
-            </div>
         </div>
     </div>
 
-    <div class="modal fade" id="adicionarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="atualizarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
-          <div class="modal-content">
+          <form id="at-atualizar" class="modal-content">
               <div class="modal-header">
                   <h3 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-circle-plus"></i>&nbsp; Nova Movimentação</h3>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                   </button>
               </div>
+              <input type="hidden" name="at-id" id="at-id">
               <div class="modal-body">
+                <input type="hidden" id="at-tipoOriginal">
                   <div class="form-group">
                       <label for="tipo">Tipo:</label>
                       <div class="input-group mb-2">
-                          <select class="custom-select" id="tipo">
+                          <select class="custom-select" id="at-tipo">
                               <option selected value="receita">Receita</option>
                               <option value="despesa">Despesa</option>
                           </select>
@@ -142,7 +92,7 @@
                           <div class="input-group-prepend">
                               <div class="input-group-text">R$</div>
                           </div>
-                          <input type="text" class="form-control" name="valor" id="valor" placeholder="0,00" data-thousands="." data-decimal="," data-prefix="" >
+                          <input type="text" class="form-control" name="valor" id="at-valor" placeholder="0,00" data-thousands="." data-decimal="," data-prefix="" >
                       </div>
                   </div>
                   <div class="form-group">
@@ -151,36 +101,47 @@
                           <div class="input-group-prepend">
                               <div class="input-group-text"><span class="fa-regular fa-calendar-days"></span></div>
                           </div>
-                          <input type="date" class="form-control" name="dataCadastro" id="dataCadastro" placeholder="00/00/0000">
+                          <input type="date" class="form-control" name="dataCadastro" id="at-dataCadastro" placeholder="00/00/0000">
                       </div>
                   </div>
                   <div class="form-group">
-                      <label for="tipo">Categoria:</label>
-                      <div class="input-group mb-2">
-                          <select class="custom-select" id="categoria">
-                              <option selected value="1">Trabalho</option>
-                          </select>
-                      </div>
-                  </div>
+                    <label for="tipo">Categoria:</label>
+                    <div class="input-group mb-2">
+                        <% if(dados.categorias?.length) { %>
+                            <select required class="custom-select" id="at-categoriaId" name="categoria">
+                                <% dados.categorias?.forEach((categoria, index) => { %>
+                                    <option <%= index === 0 ? 'selected' : '' %>
+                                            value="<%= categoria.Id %>"><%= categoria.Nome %></option>
+                                <% }) %>
+                            </select>
+                        <% } else { %>
+                            <span class="text-white">É necessário cadastrar categorias **</span>
+                        <% } %>
+                    </div>
                   <div class="form-group">
                       <label for="nome">Nome:</label>
                       <div class="input-group mb-2">
                           <div class="input-group-prepend">
                               <div class="input-group-text"><span class="fa-solid fa-table-cells-large"></span></div>
                           </div>
-                          <input type="text" class="form-control" name="nome" id="nome" placeholder="Digite o nome">
+                          <input type="text" class="form-control" name="nome" id="at-nome" placeholder="Digite o nome">
                       </div>
                   </div>
               </div>
               <div class="modal-footer d-flex justify-content-center">
-                  <button type="button" class="btn btn-second btn-secondary w-50">Salvar</button>
+                  <button type="submit" class="btn btn-second btn-secondary w-50">Salvar</button>
               </div>
-          </div>
+          </form>
       </div>
   </div>
   
 </body>
   <%-include('layout/_script') %>
+  <script type="text/javascript">
+    $(function () {
+        $('#at-valor').maskMoney();
+    })
+</script>
   <script>
     $(function(){
         $(`#historico`).DataTable({
@@ -258,5 +219,71 @@
         $("#valor").maskMoney();
 
     })
+</script>
+
+<script>
+      // ## ATUALIZAR ==============================================
+      const atualizarBtns = $('.atualizar');
+      const atualizarHistorico = async (id, data) => {
+            try {
+                let resultado = await fetch(`/historico/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+
+                if(!resultado.ok) {
+                    alert(`Houve um erro ao tentar atualizar o historico com ID: ${id}!`)
+                    return
+                }
+
+                alert(`historico atualizada com sucesso!`)
+                window.location.reload()
+            }catch (e) {
+                console.log(e)
+                alert(`Houve um erro ao tentar atualizar o historico com ID: ${id}!`)
+            }
+        }
+
+        $(atualizarBtns).each((index, btn) => {
+            let id = $(btn).attr(`data-id`);
+            let nome = $(btn).attr(`data-nome`);
+            let categoriaId = $(btn).attr(`data-categoriaId`);
+            let tipo = $(btn).attr(`data-tipo`);
+            let dataCadastro = $(btn).attr(`data-datacadastro`);
+            let valor = $(btn).attr(`data-valor`);
+            
+
+            $(btn).click(async (e) => {
+                $('#at-id').val(id);
+                $('#at-nome').val(nome);
+                $('#at-categoriaId').val(categoriaId);
+                $('#at-tipo').val(tipo);
+                $('#at-tipoOriginal').val(tipo);
+                $('#at-dataCadastro').val(dataCadastro.replace("T03:00:00.000Z", ""));
+                $('#at-valor').val(Number(valor).toLocaleString('pt-BR', {style: 'decimal'}))
+                $('#at-valor').maskMoney('mask');
+                
+            });
+        })
+
+        $("#at-atualizar").submit(async (e) => {
+            e.preventDefault()
+            const data = {
+               nome: $('#at-nome').val(),
+               tipo: $('#at-tipo').val(),
+               tipoOriginal: $('#at-tipoOriginal').val(),
+               valor: $('#at-valor').maskMoney('unmasked')[0],
+               categoriaId: $('#at-categoriaId').val(),
+               dataCadastro: $('#at-dataCadastro').val()
+            }
+
+            const id = $(`input#at-id`).val();
+
+            console.log(data)
+            atualizarHistorico(id, data)
+        })
 </script>
 </html>

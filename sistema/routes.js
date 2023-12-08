@@ -22,6 +22,7 @@ module.exports = (app) => {
 
     // HISTORICO
     app.get('/historico', historicoController.historicoGet);
+    app.put('/historico/:id', historicoController.historicoPut);
 
     // CATEGORIA
     app.get('/categoria', categoriaController.categoriaGet);

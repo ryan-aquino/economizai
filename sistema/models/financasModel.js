@@ -9,6 +9,9 @@ const novoSchema = Joi.object({
         .integer()
         .required(),
 
+    nome: Joi.string()
+        .required(),
+
     tipo: Joi.string(),
 
     valor: Joi.number()
@@ -30,6 +33,15 @@ const atualizarSchema = Joi.object({
         .integer()
         .required(),
 
+    nome: Joi.string()
+        .required(),
+
+    tipo: Joi.string()
+        .required(),
+
+    tipoOriginal: Joi.string()
+        .required(),
+
     usuarioId: Joi.number()
         .integer()
         .required(),
@@ -37,6 +49,10 @@ const atualizarSchema = Joi.object({
     valor: Joi.number()
         .precision(2)
         .required(),
+
+    dataCadastro: Joi.date()
+        .required(),
+
 
 }).options({ abortEarly: false });
 
