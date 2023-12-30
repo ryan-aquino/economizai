@@ -5,30 +5,29 @@ module.exports = () => {
 
     const pool = mysql.createPool(database);
 
-    const adicionarReceita = async (categoriaId, usuarioId, nome, valor, dataCadastro) => {
+    const adicionarReceita = async (categoriaId, usuarioId, nome, valor, cor, dataCadastro) => {
         const connection = await pool.getConnection();
 
         try {
-            const query = 'INSERT INTO Receitas (CategoriaId, UsuarioId, Valor, Nome, DataCadastro) VALUES (?, ?, ?, ?, ?)';
-            const [result] = await connection.query(query, [categoriaId, usuarioId, valor, nome, dataCadastro]);
+            const query = 'INSERT INTO Receitas (CategoriaId, UsuarioId, Valor, Cor, Nome, DataCadastro) VALUES (?, ?, ?, ?, ?, ?)';
+            const [result] = await connection.query(query, [categoriaId, usuarioId, valor, cor, nome, dataCadastro]);
             return result.insertId;
         } finally {
             connection.release();
         }
     }
 
-    const adicionarDespesa = async (categoriaId, usuarioId, nome, valor, dataCadastro) => {
+    const adicionarDespesa = async (categoriaId, usuarioId, nome, valor, cor, dataCadastro) => {
         const connection = await pool.getConnection();
 
         try {
-            const query = 'INSERT INTO Despesas (CategoriaId, UsuarioId, Valor, Nome, DataCadastro) VALUES (?, ?, ?, ?, ?)';
-            const [result] = await connection.query(query, [categoriaId, usuarioId, valor, nome, dataCadastro]);
+            const query = 'INSERT INTO Despesas (CategoriaId, UsuarioId, Valor, Cor, Nome, DataCadastro) VALUES (?, ?, ?, ?, ?, ?)';
+            const [result] = await connection.query(query, [categoriaId, usuarioId, valor, cor, nome, dataCadastro]);
             return result.insertId;
         } finally {
             connection.release();
         }
     }
-
 
     const obterTodasReceitasPorMes = async (usuarioId, month, year) => {
         const connection = await pool.getConnection();
@@ -39,6 +38,7 @@ module.exports = () => {
             Receitas.UsuarioId as UsuarioId,
             Receitas.Valor as Valor,
             Receitas.Nome as Nome,
+            Receitas.Cor as Cor,
             Receitas.DataCadastro as DataCadastro,
             Receitas.DataAtualizacao as DataAtualizacao,
             Categorias.Nome as CategoriaNome
@@ -64,6 +64,7 @@ module.exports = () => {
             Receitas.UsuarioId as UsuarioId,
             Receitas.Valor as Valor,
             Receitas.Nome as Nome,
+            Receitas.Cor as Cor,
             Receitas.DataCadastro as DataCadastro,
             Receitas.DataAtualizacao as DataAtualizacao,
             Categorias.Nome as CategoriaNome
@@ -89,6 +90,7 @@ module.exports = () => {
             Despesas.UsuarioId as UsuarioId,
             Despesas.Valor as Valor,
             Despesas.Nome as Nome,
+            Despesas.Cor as Cor,
             Despesas.DataCadastro as DataCadastro,
             Despesas.DataAtualizacao as DataAtualizacao,
             Categorias.Nome as CategoriaNome
@@ -111,6 +113,7 @@ module.exports = () => {
             Despesas.UsuarioId as UsuarioId,
             Despesas.Valor as Valor,
             Despesas.Nome as Nome,
+            Despesas.Cor as Cor,
             Despesas.DataCadastro as DataCadastro,
             Despesas.DataAtualizacao as DataAtualizacao,
             Categorias.Nome as CategoriaNome
@@ -124,7 +127,7 @@ module.exports = () => {
         }
     }
 
-    const atualizarReceita = async (receitaId, categoriaId, valor, nome, dataCadastro) => {
+    const atualizarReceita = async (receitaId, categoriaId, valor, cor, nome, dataCadastro) => {
         const connection = await pool.getConnection();
 
         try {
@@ -132,19 +135,20 @@ module.exports = () => {
                                     UPDATE Receitas
                                     SET CategoriaId = ?,
                                         Valor = ?,
+                                        Cor = ?,
                                         Nome = ?,
                                         DataCadastro = ?,
                                         DataAtualizacao = NOW()
                                     WHERE Id = ?
                                 `;
-            const [rows] = await connection.query(query, [categoriaId, valor, nome, dataCadastro, receitaId]);
+            const [rows] = await connection.query(query, [categoriaId, valor, cor, nome, dataCadastro, receitaId]);
             return rows;
         } finally {
             connection.release();
         }
     }
 
-    const atualizarDespesa = async (despesaId, categoriaId, valor, nome, dataCadastro) => {
+    const atualizarDespesa = async (despesaId, categoriaId, valor, cor, nome, dataCadastro) => {
         const connection = await pool.getConnection();
 
         try {
@@ -152,12 +156,13 @@ module.exports = () => {
                                     UPDATE Despesas
                                     SET CategoriaId = ?,
                                         Valor = ?,
+                                        Cor = ?,
                                         Nome = ?,
                                         DataCadastro = ?,
                                         DataAtualizacao = NOW()
                                     WHERE Id = ?
                                 `;
-            const [rows] = await connection.query(query, [categoriaId, valor, nome, dataCadastro, despesaId]);
+            const [rows] = await connection.query(query, [categoriaId, valor, cor, nome, dataCadastro, despesaId]);
             return rows;
         } finally {
             connection.release();

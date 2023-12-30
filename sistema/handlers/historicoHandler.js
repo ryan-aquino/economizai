@@ -40,7 +40,7 @@ module.exports = () => ({
         if (error)
             return response(false, 400, error.message);
 
-        const { id, nome, valor, dataCadastro, categoriaId, usuarioId, tipo, tipoOriginal } = value;
+        const { id, nome, valor, cor, dataCadastro, categoriaId, usuarioId, tipo, tipoOriginal } = value;
         let financaExiste = null;
         if (validationReceita(tipoOriginal))
             financaExiste = await financasRepository.obterUmaReceitaPorId(usuarioId, id);
@@ -55,7 +55,7 @@ module.exports = () => ({
             if (validationReceita(tipoOriginal)) {
                 const deletadoSucesso = await financasRepository.deletarReceita(id);
                 if (deletadoSucesso) {
-                    const inseridoSucesso = await financasRepository.adicionarDespesa(categoriaId, usuarioId, nome, valor, dateManager.adHoras(dataCadastro, 3));
+                    const inseridoSucesso = await financasRepository.adicionarDespesa(categoriaId, usuarioId, nome, valor, cor, dateManager.adHoras(dataCadastro, 3));
 
                     if (inseridoSucesso > 0)
                         return response(!!inseridoSucesso, 200, "");
@@ -65,7 +65,7 @@ module.exports = () => ({
             } else {
                 const deletadoSucesso = await financasRepository.deletarDespesa(id);
                 if (deletadoSucesso) {
-                    const inseridoSucesso = await financasRepository.adicionarReceita(categoriaId, usuarioId, nome, valor, dateManager.adHoras(dataCadastro, 3));
+                    const inseridoSucesso = await financasRepository.adicionarReceita(categoriaId, usuarioId, nome, valor, cor, dateManager.adHoras(dataCadastro, 3));
 
                     if (inseridoSucesso > 0)
                         return response(!!inseridoSucesso, 200, "");
@@ -76,12 +76,12 @@ module.exports = () => ({
         }
 
         if(validationReceita(tipo)) {
-            const financaAtualizada = await financasRepository.atualizarReceita(id, categoriaId, valor, nome, dateManager.adHoras(dataCadastro, 3));
+            const financaAtualizada = await financasRepository.atualizarReceita(id, categoriaId, valor, cor, nome, dateManager.adHoras(dataCadastro, 3));
             if (financaAtualizada) {
                 return response(!!financaAtualizada, 200, "");
             }
         } else {
-            const financaAtualizada = await financasRepository.atualizarDespesa(id, categoriaId, valor, nome, dateManager.adHoras(dataCadastro, 3));
+            const financaAtualizada = await financasRepository.atualizarDespesa(id, categoriaId, valor, cor, nome, dateManager.adHoras(dataCadastro, 3));
             if (financaAtualizada) {
                 return response(!!financaAtualizada, 200, "");
             }

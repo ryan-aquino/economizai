@@ -9,6 +9,9 @@ const novoSchema = Joi.object({
         .integer()
         .required(),
 
+    cor: Joi.string()
+        .required(),
+
     nome: Joi.string()
         .required(),
 
@@ -34,6 +37,9 @@ const atualizarSchema = Joi.object({
         .required(),
 
     nome: Joi.string()
+        .required(),
+
+    cor: Joi.string()
         .required(),
 
     tipo: Joi.string()

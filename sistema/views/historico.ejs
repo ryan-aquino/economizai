@@ -27,8 +27,9 @@
                     <tr>
                         <th>NOME</th>
                         <th>CATEGORIA</th>
-                        <th>DATA</th>
                         <th>VALOR(R$)</th>
+                        <th>COR</th>
+                        <th>DATA</th>
                         <th>AÇÕES</th>
                     </tr>
                     </thead>
@@ -41,15 +42,16 @@
                                <td>
                                 <%= dado.CategoriaNome %>
                                </td>
-                               <td>
-                                <%= new Date(dado.DataCadastro).toLocaleDateString("pt-BR")%>
-                               </td>
-                               <td>
-                                <%= dado.Valor.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})%>
-                               </td>
+                                <td>
+                                    <%= dado.Valor.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})%>
+                                </td>
+                                <td><input value="<%=dado.Cor%>" type="color" disabled/></td>
+                                <td>
+                                    <%= new Date(dado.DataCadastro).toLocaleDateString("pt-BR")%>
+                                </td>
                                <td>
                                 <button class="btn btn-action atualizar" data-id="<%=dado.Id%>" data-nome="<%=dado.Nome%>" data-categoriaId="<%=dado.CategoriaId%>" data-toggle="modal"
-                                    data-dataCadastro="<%=dado.DataCadastro%>"  data-tipo="<%=dado.Tipo%>"  data-valor="<%=dado.Valor%>"
+                                    data-dataCadastro="<%=dado.DataCadastro%>" data-tipo="<%=dado.Tipo%>" data-valor="<%=dado.Valor%>" data-cor="<%=dado.Cor%>"
                                     data-target="#atualizarModal"><i class="fa-solid fa-pen-to-square"></i>
                             </button>
                             <button class="btn btn-action deletar" data-id="<%=dado.Id%>"><i class="fa-solid fa-trash"></i></button>
@@ -118,6 +120,15 @@
                             <span class="text-white">É necessário cadastrar categorias **</span>
                         <% } %>
                     </div>
+                      <div class="form-group">
+                          <label for="nome">Cor:</label>
+                          <div class="input-group mb-2">
+                              <div class="input-group-prepend">
+                                  <div class="input-group-text"><span class="fa-solid fa-palette"></span></div>
+                              </div>
+                              <input type="color" class="form-control" name="at-cor" id="at-cor" placeholder="Digite uma cor em hexadecimal">
+                          </div>
+                      </div>
                   <div class="form-group">
                       <label for="nome">Nome:</label>
                       <div class="input-group mb-2">
@@ -134,7 +145,7 @@
           </form>
       </div>
   </div>
-  
+</div>
 </body>
   <%-include('layout/_script') %>
   <script type="text/javascript">
@@ -147,10 +158,11 @@
         $(`#historico`).DataTable({
             "lengthChange": false,
             "columnDefs": [
-                {"width": "40%", "targets": 0},
+                {"width": "30%", "targets": 0},
                 {"width": "20%", "targets": 1},
                 {"width": "20%", "targets": 2},
-                {"width": "10%", "targets": 3}
+                {"width": "10%", "targets": 3},
+                {"width": "10%", "targets": 4}
             ],
             language: {
                 url: 'js/pt-BR.json',
@@ -254,13 +266,15 @@
             let tipo = $(btn).attr(`data-tipo`);
             let dataCadastro = $(btn).attr(`data-datacadastro`);
             let valor = $(btn).attr(`data-valor`);
-            
+            let cor = $(btn).attr(`data-cor`);
+
 
             $(btn).click(async (e) => {
                 $('#at-id').val(id);
                 $('#at-nome').val(nome);
                 $('#at-categoriaId').val(categoriaId);
                 $('#at-tipo').val(tipo);
+                $('#at-cor').val(cor);
                 $('#at-tipoOriginal').val(tipo);
                 $('#at-dataCadastro').val(dataCadastro.replace("T03:00:00.000Z", ""));
                 $('#at-valor').val(Number(valor).toLocaleString('pt-BR', {style: 'decimal'}))
@@ -274,6 +288,7 @@
             const data = {
                nome: $('#at-nome').val(),
                tipo: $('#at-tipo').val(),
+               cor: $('#at-cor').val(),
                tipoOriginal: $('#at-tipoOriginal').val(),
                valor: $('#at-valor').maskMoney('unmasked')[0],
                categoriaId: $('#at-categoriaId').val(),

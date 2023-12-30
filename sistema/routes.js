@@ -18,7 +18,7 @@ module.exports = (app) => {
 
 
     // DASHBOARD
-    app.post('/dashboard', dashboardController.dashboardGet);
+    app.get('/dashboard', dashboardController.dashboardGet);
 
     // HISTORICO
     app.get('/historico', historicoController.historicoGet);
