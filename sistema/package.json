@@ -1,7 +1,7 @@
 {
   "name": "Economizai",
   "version": "1.0.0",
-  "description": "Sistema destinado a entrega do trabalho de conclusao de curso de Analise e desenvolvimento de sistemas",
+  "description": "Sistema destinado a entrega do trabalho de conclusao de curso de Analise e Desenvolvimento de Sistemas",
   "main": "app.js",
   "author": "Gustavo Liros, Matheus Delfino, Nathan Rosa, Ryan Silva",
   "license": "MIT",

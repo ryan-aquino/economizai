@@ -171,14 +171,20 @@
     })
     </script>
 <script>
-    $(document).ready(() => {
+$(function () {
         const prevButton = document.getElementById('prevButton');
         const nextButton = document.getElementById('nextButton');
         const monthYearDisplay = document.getElementById('monthYearDisplay');
         const hiddenDateInput = document.getElementById('hiddenDate');
 
-        let currentMonth = new Date().getMonth();  // Janeiro é 0
-        let currentYear = new Date().getFullYear();
+        // Obter os valores do mês e do ano da URL, se presentes
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlMonth = urlParams.get('month');
+        const urlYear = urlParams.get('year');
+
+        // Definir o mês e o ano atuais se não estiverem presentes na URL
+        let currentMonth = urlMonth ? parseInt(urlMonth, 10) - 1 : new Date().getMonth();
+        let currentYear = urlYear ? parseInt(urlYear, 10) : new Date().getFullYear();
 
         function updateDisplay() {
             const monthNames = [
@@ -199,6 +205,7 @@
 
             monthYearDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
             hiddenDateInput.value = `${formattedYear}-${formattedMonth}`;
+
         }
 
         // Avançar para o próximo mês
@@ -209,6 +216,9 @@
                 currentYear++;
             }
             updateDisplay();
+
+            const newUrl = `?month=${currentMonth + 1}&year=${currentYear}`;
+            window.location.href = newUrl;
         }
 
         // Voltar para o mês anterior
@@ -219,6 +229,10 @@
                 currentYear--;
             }
             updateDisplay();
+
+            // Redirecionar para a nova URL
+            const newUrl = `?month=${currentMonth + 1}&year=${currentYear}`;
+            window.location.href = newUrl;
         }
 
         // Adicionar ouvintes de eventos aos botões
@@ -227,8 +241,6 @@
 
         // Exibir o mês e o ano iniciais
         updateDisplay();
-
-        $("#valor").maskMoney();
 
     })
 </script>
