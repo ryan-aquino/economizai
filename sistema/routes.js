@@ -18,7 +18,8 @@ module.exports = (app) => {
 
 
     // DASHBOARD
-    app.get('/dashboard', dashboardController.dashboardGet);
+   // app.get('/dashboard', dashboardController.dashboardGet);
+    app.get('/dashboard', dashboardController.dashboardGetByCategoria);
 
     // HISTORICO
     app.get('/historico', historicoController.historicoGet);

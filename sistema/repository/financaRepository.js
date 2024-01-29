@@ -193,6 +193,61 @@ module.exports = () => {
         }
     }
 
+
+    const somarReceita = async (userId, month, year) => {
+        const connection = await pool.getConnection();
+
+        try {
+            const query = `SELECT Id
+                                  ,Nome
+                                  ,Cor
+                                  ,sum(valor) AS total_categoria
+                            FROM 
+                                (SELECT c.id
+                                    ,r.UsuarioId
+                                    ,r.DataCadastro
+                                    ,c.Nome
+                                    ,c.Cor
+                                    ,r.valor
+                                FROM receitas r
+                                JOIN categorias c
+                                ON r.CategoriaId = c.Id
+                                WHERE r.UsuarioId = ? AND YEAR(r.DataCadastro) = ? AND MONTH(r.DataCadastro) = ?) v
+                            GROUP BY c.Id, Nome, Cor`;
+            const [rows] = await connection.query(query, [userId, year, month]);
+            return rows; // Retorna as linhas com os totais de receita do mês por categoria
+        } finally {
+            connection.release();
+        }
+    }
+
+    const somarDespesa = async (userId, month, year) => {
+        const connection = await pool.getConnection();
+
+        try {
+            const query = `SELECT Id
+                                  ,Nome
+                                  ,Cor
+                                  ,sum(valor) AS total_categoria
+                            FROM 
+                                (SELECT c.id
+                                    ,d.UsuarioId
+                                    ,d.DataCadastro
+                                    ,c.Nome
+                                    ,c.Cor
+                                    ,d.valor
+                                FROM despesas d
+                                JOIN categorias c
+                                ON d.CategoriaId = c.Id
+                                WHERE d.UsuarioId = ? AND YEAR(d.DataCadastro) = ? AND MONTH(d.DataCadastro) = ?) v
+                            GROUP BY c.Id, Nome, Cor`;
+            const [rows] = await connection.query(query, [userId, year, month]);
+            return rows; // Retorna as linhas com os totais de despesa do mês por categoria
+        } finally {
+            connection.release();
+        }
+    }
+
     return {
         adicionarReceita,
         adicionarDespesa,
@@ -204,6 +259,8 @@ module.exports = () => {
         obterUmaDespesaPorId,
         deletarReceita,
         deletarDespesa,
+        somarReceita,
+        somarDespesa,
     }
 
 }
