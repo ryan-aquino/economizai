@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <%- include('layout/_header', { siteTitle: 'Economizai - Início ' }) %>
+    <%- include('layout/_css') %>
+</head>
+<body>
+<%- include('components/menu', {route:'inicio'}) %>
+<main class="container-fluid">
+    <div class="main-center">
+        <div class="row p-5">
+            <input type="hidden" id="hiddenDate" value="">
+            <div class="w-100 d-flex month-select" id="monthYearContainer">
+                <button id="prevButton"><</button>
+                <div class="month-content">
+                    <div id="monthYearDisplay"></div>
+                    <i class="fa-regular fa-calendar-days"></i>
+                </div>
+                <button id="nextButton">></button>
+            </div>
+        </div>
+        <div class="row p-5">
+            <div class="col-lg-4 col-md-12 mb-12">
+                <div class="card saldo">
+                    <div class="card-body d-flex justify-content-between">
+                        <div class="icon d-flex justify-content-center align-items-center">
+                        <span class="d-none d-md-block">
+                            <i class="fa-solid fa-wallet" style="font-size: 60pt"></i>
+                        </span>
+                        </div>
+                        <div>
+                            <span class="card-title">Saldo</span>
+                            <span class="valor"><%= saldo.toLocaleString('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                }); %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12 mb-12">
+                <div class="card receitas">
+                    <div class="card-body d-flex justify-content-between">
+                        <div class="icon d-flex justify-content-center align-items-center">
+                        <span class="d-none d-md-block">
+                            <i class="fa-solid fa-money-bill-trend-up" style="font-size: 60pt"></i>
+                        </span>
+                        </div>
+                        <div>
+                            <span class="card-title">Receitas</span>
+                            <span class="valor"><%= receitas.toLocaleString('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                }); %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12 mb-12">
+                <div class="card despesas">
+                    <div class="card-body d-flex justify-content-between">
+                        <div class="icon d-flex justify-content-center align-items-center">
+                        <span class="d-none d-md-block">
+                          <i class="fa-solid fa-money-bill-trend-up fa-rotate-180" style="font-size: 60pt"></i>
+                        </span>
+                        </div>
+                        <div>
+                            <span class="card-title">Despesas</span>
+                            <span class="valor"><%= despesas.toLocaleString('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                }); %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row p-5 d-flex justify-content-center">
+            <button type="submit" class="btn btn-secondary btn-second add-btn" data-toggle="modal"
+                    data-target="#adicionarModal">
+                <i class="fa-solid fa-circle-plus"></i>&nbsp; Adicionar
+            </button>
+        </div>
+    </div>
+</main>
+
+<div class="modal fade" id="adicionarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="adicionar" class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-circle-plus"></i>&nbsp; Nova
+                    Movimentação</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">x
+                <div class="form-group">
+                    <label for="tipo">Tipo:</label>
+                    <div class="input-group mb-2">
+                        <select required class="custom-select" id="tipo" name="tipo">
+                            <option selected value="receita">Receita</option>
+                            <option value="despesa">Despesa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="valor">Valor:</label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">R$</div>
+                        </div>
+                        <input type="text" class="form-control valor" name="valor" id="valor" placeholder="0,00"
+                               data-thousands="." data-decimal="," data-prefix="" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dataCadastro">Data:</label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><span class="fa-regular fa-calendar-days"></span></div>
+                        </div>
+                        <input type="date" class="form-control" name="dataCadastro" id="dataCadastro"
+                               placeholder="00/00/0000" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tipo">Categoria:</label>
+                    <div class="input-group mb-2">
+                        <% if(categorias?.length) { %>
+                            <select required class="custom-select" id="categoria" name="categoria">
+                                <% categorias?.forEach((categoria, index) => { %>
+                                    <option <%= index === 0 ? 'selected' : '' %>
+                                            value="<%= categoria.Id %>"><%= categoria.Nome %></option>
+                                <% }) %>
+                            </select>
+                        <% } else { %>
+                            <span class="text-white">É necessário cadastrar categorias **</span>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="nome">Cor:</label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><span class="fa-solid fa-palette"></span></div>
+                        </div>
+                        <input type="color" class="form-control" name="cor" id="cor" placeholder="Digite uma cor em hexadecimal">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><span class="fa-solid fa-table-cells-large"></span></div>
+                        </div>
+                        <input type="text" class="form-control" name="nome" id="nome" placeholder="Digite o nome">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="submit" class="btn btn-second btn-secondary w-50">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<%- include('layout/_script') %>
+<script type="text/javascript">
+    $(function () {
+        $('#adicionar').submit(async (e) => {
+
+            e.preventDefault()
+
+            const tipo = $('#tipo').val();
+            const valor = $('#valor').maskMoney('unmasked')[0];
+            const dataCadastro = $('#dataCadastro').val();
+            const categoriaId = $('#categoria').val();
+            const nome = $('#nome').val();
+            const cor = $('#cor').val();
+
+            const data = {
+                tipo,
+                valor,
+                dataCadastro,
+                categoriaId,
+                nome,
+                cor
+            }
+
+            try {
+                let resultado = await fetch(`/financas`, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+
+                if (!resultado.ok) {
+                    alert(`Houve um erro ao tentar inserir a movimentação verifique os valores enviados!`)
+                    return
+                }
+
+                alert(`Movimentação adicionada com sucesso!`)
+                window.location.reload()
+            } catch (e) {
+                console.log(e)
+                alert(`Houve um erro ao tentar inserir a movimentação!`)
+            }
+
+        })
+    })
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#valor').maskMoney();
+    })
+</script>
+<script type="text/javascript">
+    $(function () {
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const monthYearDisplay = document.getElementById('monthYearDisplay');
+        const hiddenDateInput = document.getElementById('hiddenDate');
+
+        // Obter os valores do mês e do ano da URL, se presentes
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlMonth = urlParams.get('month');
+        const urlYear = urlParams.get('year');
+
+        // Definir o mês e o ano atuais se não estiverem presentes na URL
+        let currentMonth = urlMonth ? parseInt(urlMonth, 10) - 1 : new Date().getMonth();
+        let currentYear = urlYear ? parseInt(urlYear, 10) : new Date().getFullYear();
+
+        function updateDisplay() {
+            const monthNames = [
+                "JANEIRO",
+                "FEVEREIRO",
+                "MARÇO",
+                "ABRIL",
+                "MAIO",
+                "JUNHO",
+                "JULHO",
+                "AGOSTO",
+                "SETEMBRO",
+                "OUTUBRO",
+                "NOVEMBRO",
+                "DEZEMBRO"];
+            const formattedMonth = (currentMonth + 1).toString().padStart(2, '0');  // Adiciona zero à esquerda se necessário
+            const formattedYear = currentYear.toString();
+
+            monthYearDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            hiddenDateInput.value = `${formattedYear}-${formattedMonth}`;
+
+        }
+
+        // Avançar para o próximo mês
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            updateDisplay();
+
+            const newUrl = `?month=${currentMonth + 1}&year=${currentYear}`;
+            window.location.href = newUrl;
+        }
+
+        // Voltar para o mês anterior
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            updateDisplay();
+
+            // Redirecionar para a nova URL
+            const newUrl = `?month=${currentMonth + 1}&year=${currentYear}`;
+            window.location.href = newUrl;
+        }
+
+        // Adicionar ouvintes de eventos aos botões
+        nextButton.addEventListener('click', nextMonth);
+        prevButton.addEventListener('click', prevMonth);
+
+        // Exibir o mês e o ano iniciais
+        updateDisplay();
+
+    })
+</script>
+</html>

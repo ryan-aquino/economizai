@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <%-include('layout/_header', { siteTitle: 'Economizai - Perfil' }) %>
+    <%-include('layout/_css') %>
+</head>
+<body>
+  <%-include('components/menu', {route:'perfil'}) %>
+
+  <div class="container-fluid d-md-flex d-inline">
+    <div class="perfil col-md-4 d-flex flex-column align-items-center justify-content-center">
+      <div class="imagem-perfil mb-5 borda p-2 rounded">
+        <i class="fa-solid fa-user fa-10x" style="color: white"></i>
+      </div>
+      <div class="botao-perfil d-flex flex-column">
+        <button type="" id="salvar" class="btn btn-second btn-secondary mb-4">Salvar</button> 
+      </div>
+    </div>
+    <div class="col-md-8 d-flex flex-column justify-content-center">
+      <form class="cardbase">
+        <input type="hidden" value="<%=usuario.Id %>" id="Id">
+        <div class="form-row">
+          <div class="line form-group col-md-6">
+            <div class="line form-group">
+              <label for="inputEmail">Email:</label>
+              <input value="<%=usuario.Email %>" type="email" class="form-control" id="email" placeholder="Email">
+            </div>
+          </div>
+          <div class="line form-group col-md-6">
+            <div class="line form-group">
+              <label for="inputPassword">Senha:</label>
+              <input type="password" class="form-control" id="senha" placeholder="Senha">
+            </div>
+          </div>
+        </div>
+        <div class="line form-group">
+          <div class="line form-group">
+            <label for="inputName">Nome:</label>
+            <input value="<%=usuario.Nome %>" type="text" class="form-control" id="nome" placeholder="Nome">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+<%-include('layout/_script') %>
+<script>
+  $(function(){
+    const nome = $('#nome') 
+    const email = $('#email') 
+    const senha = $('#senha')
+    const Id = $('#Id')
+    
+    const salvar = $('#salvar')
+    salvar.click(async ()=> {
+      const atualizarUsuario = async (id, data) => {
+            try {
+                let resultado = await fetch(`/perfil/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+
+                if(!resultado.ok) {
+                    alert(`Houve um erro ao tentar atualizar o usuario com ID: ${id}!`)
+                    return
+                }
+
+                alert(`Usuario atualizado com sucesso!`)
+                window.location.reload()
+            }catch (e) {
+                console.log(e)
+                alert(`Houve um erro ao tentar atualizar o usuario com ID: ${id}!`)
+            }
+        }
+    
+        const data = {
+          email: email.val(),
+          nome: nome.val(),
+          senha: senha.val()
+        }
+      await atualizarUsuario(Id.val(),data) 
+    })
+
+  })
+
+</script>
+</html>

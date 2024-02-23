@@ -19,9 +19,12 @@ CREATE TABLE Usuarios (
 -- Tabela de Categorias
 CREATE TABLE Categorias (
     Id INT AUTO_INCREMENT PRIMARY KEY,
+    UsuarioId INT NOT NULL,
     Nome VARCHAR(150) NOT NULL,
-    Cor VARCHAR(6),
-    DataCadastro DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
+    Cor VARCHAR(7),
+    DataCadastro DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    INDEX idx_Categorias_UsusarioId (UsuarioId),
+    FOREIGN KEY (UsuarioId) REFERENCES Usuarios(Id)
 );
 
 -- Tabela de Receitas
@@ -29,7 +32,9 @@ CREATE TABLE Receitas (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     CategoriaId INT NOT NULL,
     UsuarioId INT NOT NULL,
+    Nome VARCHAR(150) NOT NULL,
     Valor DECIMAL(18,2) NOT NULL,
+    Cor VARCHAR(7),
     DataCadastro DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     DataAtualizacao DATETIME,
     INDEX idx_Receitas_CategoriaId (CategoriaId),
@@ -45,23 +50,14 @@ CREATE TABLE Despesas (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     CategoriaId INT NOT NULL,
     UsuarioId INT NOT NULL,
+    Nome VARCHAR(150) NOT NULL,
     Valor DECIMAL(18,2) NOT NULL,
+    Cor VARCHAR(7),
     DataCadastro DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     DataAtualizacao DATETIME,
     INDEX idx_Despesas_CategoriaId (CategoriaId),
     INDEX idx_Despesas_UsusarioId (UsuarioId),
     INDEX idx_Despesas_DataCadastro (DataCadastro),
     FOREIGN KEY (CategoriaId) REFERENCES Categorias(Id),
-    FOREIGN KEY (UsuarioId) REFERENCES Usuarios(Id)
-);
-
--- Tabela de LimiteDespesas
-CREATE TABLE LimiteDespesas (
-    Id INT AUTO_INCREMENT PRIMARY KEY,
-    UsuarioId INT NOT NULL,
-    Valor DECIMAL(18,2) NOT NULL,
-    DataCadastro DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    INDEX idx_LimiteDespesas_DataCadastro (DataCadastro),
-    INDEX idx_LimiteDespesas_UsusarioId (UsuarioId),
     FOREIGN KEY (UsuarioId) REFERENCES Usuarios(Id)
 );

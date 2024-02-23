@@ -1,13 +1,239 @@
 <!doctype html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Dashboard</title>
+    <%-include('layout/_header', { siteTitle: 'Economizai - Dashboard' }) %>
+    <%-include('layout/_css') %>
 </head>
 <body>
-<h1>Dashboard</h1>
+  <%-include('components/menu', {route:'dashboard'}) %>
+  <main class="container-fluid">
+      <div>
+      <div class="row p-5">
+          <input type="hidden" id="hiddenDate" value="">
+          <div class="w-100 d-flex month-select" id="monthYearContainer">
+              <button id="prevButton"><</button>
+              <div class="month-content">
+                  <div id="monthYearDisplay"></div>
+                  <i class="fa-regular fa-calendar-days"></i>
+              </div>
+              <button id="nextButton">></button>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-6">
+              <div class="text-center">
+                  <h2>Receitas por categorias</h2>
+              </div>
+             <div class="card">
+                 <div class="card-body">
+                    <% if(receitasCategoria.length) {%>
+                         <canvas id="receitasCategoria"></canvas>
+                     <%} else {%>
+                        <h2>Nenhuma receita localizada</h2>
+                     <% }%>
+                 </div>
+             </div>
+          </div>
+          <div class="col-md-6">
+              <div class="text-center">
+                  <h2>Despesas por categoria</h2>
+              </div>
+              <div class="card">
+                  <div class="card-body">
+                      <% if(despesasCategoria.length) {%>
+                          <canvas id="despesasCategoria"></canvas>
+                  <%} else {%>
+                          <h2>Nenhuma despesa localizada</h2>
+                      <% }%>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-6">
+              <div class="text-center">
+                  <br><br>
+                  <h2>Receitas</h2>
+              </div>
+             <div class="card">
+                 <div class="card-body">
+                    <% if(receitas.length) {%>
+                         <canvas id="receitas"></canvas>
+                     <%} else {%>
+                        <h2>Nenhuma receita localizada</h2>
+                     <% }%>
+                 </div>
+             </div>
+          </div>
+          <div class="col-md-6">
+              <div class="text-center">
+                  <br><br>
+                  <h2>Despesas</h2>
+              </div>
+              <div class="card">
+                  <div class="card-body">
+                      <% if(despesas.length) {%>
+                          <canvas id="despesas"></canvas>
+                  <%} else {%>
+                          <h2>Nenhuma despesa localizada</h2>
+                      <% }%>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  </main>
 </body>
+<%-include('layout/_script') %>
+<script type="text/javascript">
+    $(function () {
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const monthYearDisplay = document.getElementById('monthYearDisplay');
+        const hiddenDateInput = document.getElementById('hiddenDate');
+
+        // Obter os valores do mês e do ano da URL, se presentes
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlMonth = urlParams.get('month');
+        const urlYear = urlParams.get('year');
+
+        // Definir o mês e o ano atuais se não estiverem presentes na URL
+        let currentMonth = urlMonth ? parseInt(urlMonth, 10) - 1 : new Date().getMonth();
+        let currentYear = urlYear ? parseInt(urlYear, 10) : new Date().getFullYear();
+
+        function updateDisplay() {
+            const monthNames = [
+                "JANEIRO",
+                "FEVEREIRO",
+                "MARÇO",
+                "ABRIL",
+                "MAIO",
+                "JUNHO",
+                "JULHO",
+                "AGOSTO",
+                "SETEMBRO",
+                "OUTUBRO",
+                "NOVEMBRO",
+                "DEZEMBRO"];
+            const formattedMonth = (currentMonth + 1).toString().padStart(2, '0');  // Adiciona zero à esquerda se necessário
+            const formattedYear = currentYear.toString();
+
+            monthYearDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            hiddenDateInput.value = `${formattedYear}-${formattedMonth}`;
+
+        }
+
+        // Avançar para o próximo mês
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            updateDisplay();
+
+            const newUrl = `?month=${currentMonth + 1}&year=${currentYear}`;
+            window.location.href = newUrl;
+        }
+
+        // Voltar para o mês anterior
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            updateDisplay();
+
+            // Redirecionar para a nova URL
+            const newUrl = `?month=${currentMonth + 1}&year=${currentYear}`;
+            window.location.href = newUrl;
+        }
+
+        // Adicionar ouvintes de eventos aos botões
+        nextButton.addEventListener('click', nextMonth);
+        prevButton.addEventListener('click', prevMonth);
+
+        // Exibir o mês e o ano iniciais
+        updateDisplay();
+
+    })
+</script>
+<script src="/js/chart.min.js"></script>
+<script src="/js/chartjs-plugin-datalabels@2.js"></script>
+<script>
+    const ReceitasCategoria = <%- JSON.stringify(receitasCategoria)%>;
+    const DespesasCategoria = <%- JSON.stringify(despesasCategoria)%>;
+    const Receitas = <%- JSON.stringify(receitas)%>;
+    const Despesas = <%- JSON.stringify(despesas)%>;
+
+    Chart.register(ChartDataLabels);
+    function GenerateGraph (canvasName, Datalist) {
+        const DATA_COUNT = Datalist.length || 0;
+        const NUMBER_CFG = {count: DATA_COUNT, min: 0, max: 100};
+        const labels = Datalist.map(list => list.Nome);
+        const data = {
+            labels: labels,
+            datasets: [
+                {
+                    data: Datalist.map(list => list.Percentual),
+                    backgroundColor: Datalist.map(list => list.Cor)
+                }
+            ]
+        };
+        const config = {
+            type: 'pie',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: 'white',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: false,
+                        position: 'nearest'
+                    },
+                    datalabels: {
+                        color: '#000000',
+                        backgroundColor: '#ffffff',
+                        textAlign: 'center',
+                        borderRadius: 5,
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        formatter: (value, context) => {
+                            return value + '%';
+                        },
+                    }
+                }
+            },
+        };
+        var canvas = new Chart( document.getElementById(canvasName), config, data);
+    }
+
+    // ============================= RECEITAS
+        GenerateGraph('receitasCategoria', ReceitasCategoria)
+    // ============================= DESPESAS
+        GenerateGraph('despesasCategoria', DespesasCategoria)
+    // ============================= RECEITAS
+        GenerateGraph('receitas', Receitas)
+    // ============================= DESPESAS
+        GenerateGraph('despesas', Despesas)
+
+    // Criando elemento para tooltip.
+    if (!document.getElementById('chartjs-tooltip')) {
+        const tooltipEl = document.createElement('div');
+        tooltipEl.id = 'chartjs-tooltip';
+        tooltipEl.innerHTML = '';
+        document.body.appendChild(tooltipEl);
+    }
+
+
+</script>
 </html>

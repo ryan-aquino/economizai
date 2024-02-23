@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <%-include('layout/_header', { siteTitle: 'Economizai - Histórico' }) %>
+    <%-include('layout/_css') %>
+</head>
+<body>
+  <%-include('components/menu', {route:'historico'}) %>
+
+  <div class="row p-5">
+    <input type="hidden" id="hiddenDate" value="">
+    <div class="w-100 d-flex month-select" id="monthYearContainer">
+        <button id="prevButton"><</button>
+        <div class="month-content">
+            <div id="monthYearDisplay"></div><i class="fa-regular fa-calendar-days"></i>
+        </div>
+        <button id="nextButton">></button>
+    </div>
+</div>
+<div class="row p-5">
+    <div class="col-12">    
+        <div class="main-center">
+            <div class="pl-5 pr-5 pt-5 pb-2">
+                <% if(contains) { %>
+                <table id="historico" class="display responsive" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th>NOME</th>
+                        <th>CATEGORIA</th>
+                        <th>VALOR(R$)</th>
+                        <th>COR</th>
+                        <th>DATA</th>
+                        <th>AÇÕES</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <% dados.historico.forEach((dado) => { %>
+                            <tr>
+                               <td>
+                                <%= dado.Nome %>
+                               </td> 
+                               <td>
+                                <%= dado.CategoriaNome %>
+                               </td>
+                                <td>
+                                    <%= dado.Valor.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})%>
+                                </td>
+                                <td><input value="<%=dado.Cor%>" type="color" disabled/></td>
+                                <td>
+                                    <%= new Date(dado.DataCadastro).toLocaleDateString("pt-BR")%>
+                                </td>
+                               <td>
+                                <button class="btn btn-action atualizar" data-id="<%=dado.Id%>" data-nome="<%=dado.Nome%>" data-categoriaId="<%=dado.CategoriaId%>" data-toggle="modal"
+                                    data-dataCadastro="<%=dado.DataCadastro%>" data-tipo="<%=dado.Tipo%>" data-valor="<%=dado.Valor%>" data-cor="<%=dado.Cor%>"
+                                    data-target="#atualizarModal"><i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button class="btn btn-action deletar" data-id="<%=dado.Id%>"><i class="fa-solid fa-trash"></i></button>
+                               </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                    <% } else { %>
+                        <h2 class="no-info">Não há categorias cadastradas</h2>
+                    <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="atualizarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <form id="at-atualizar" class="modal-content">
+              <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-circle-plus"></i>&nbsp; Nova Movimentação</h3>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <input type="hidden" name="at-id" id="at-id">
+              <div class="modal-body">
+                <input type="hidden" id="at-tipoOriginal">
+                  <div class="form-group">
+                      <label for="tipo">Tipo:</label>
+                      <div class="input-group mb-2">
+                          <select class="custom-select" id="at-tipo">
+                              <option selected value="receita">Receita</option>
+                              <option value="despesa">Despesa</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="valor">Valor:</label>
+                      <div class="input-group mb-2">
+                          <div class="input-group-prepend">
+                              <div class="input-group-text">R$</div>
+                          </div>
+                          <input type="text" class="form-control" name="valor" id="at-valor" placeholder="0,00" data-thousands="." data-decimal="," data-prefix="" >
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="dataCadastro">Data:</label>
+                      <div class="input-group mb-2">
+                          <div class="input-group-prepend">
+                              <div class="input-group-text"><span class="fa-regular fa-calendar-days"></span></div>
+                          </div>
+                          <input type="date" class="form-control" name="dataCadastro" id="at-dataCadastro" placeholder="00/00/0000">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="tipo">Categoria:</label>
+                    <div class="input-group mb-2">
+                        <% if(dados.categorias?.length) { %>
+                            <select required class="custom-select" id="at-categoriaId" name="categoria">
+                                <% dados.categorias?.forEach((categoria, index) => { %>
+                                    <option <%= index === 0 ? 'selected' : '' %>
+                                            value="<%= categoria.Id %>"><%= categoria.Nome %></option>
+                                <% }) %>
+                            </select>
+                        <% } else { %>
+                            <span class="text-white">É necessário cadastrar categorias **</span>
+                        <% } %>
+                    </div>
+                      <div class="form-group">
+                          <label for="nome">Cor:</label>
+                          <div class="input-group mb-2">
+                              <div class="input-group-prepend">
+                                  <div class="input-group-text"><span class="fa-solid fa-palette"></span></div>
+                              </div>
+                              <input type="color" class="form-control" name="at-cor" id="at-cor" placeholder="Digite uma cor em hexadecimal">
+                          </div>
+                      </div>
+                  <div class="form-group">
+                      <label for="nome">Nome:</label>
+                      <div class="input-group mb-2">
+                          <div class="input-group-prepend">
+                              <div class="input-group-text"><span class="fa-solid fa-table-cells-large"></span></div>
+                          </div>
+                          <input type="text" class="form-control" name="nome" id="at-nome" placeholder="Digite o nome">
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer d-flex justify-content-center">
+                  <button type="submit" class="btn btn-second btn-secondary w-50">Salvar</button>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+</body>
+  <%-include('layout/_script') %>
+  <script type="text/javascript">
+    $(function () {
+        $('#at-valor').maskMoney();
+    })
+</script>
+  <script>
+    $(function(){
+        $(`#historico`).DataTable({
+            "lengthChange": false,
+            "columnDefs": [
+                {"width": "30%", "targets": 0},
+                {"width": "20%", "targets": 1},
+                {"width": "20%", "targets": 2},
+                {"width": "10%", "targets": 3},
+                {"width": "10%", "targets": 4}
+            ],
+            language: {
+                url: 'js/pt-BR.json',
+            },
+        });
+    })
+    </script>
+<script>
+$(function () {
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const monthYearDisplay = document.getElementById('monthYearDisplay');
+        const hiddenDateInput = document.getElementById('hiddenDate');
+
+        // Obter os valores do mês e do ano da URL, se presentes
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlMonth = urlParams.get('month');
+        const urlYear = urlParams.get('year');
+
+        // Definir o mês e o ano atuais se não estiverem presentes na URL
+        let currentMonth = urlMonth ? parseInt(urlMonth, 10) - 1 : new Date().getMonth();
+        let currentYear = urlYear ? parseInt(urlYear, 10) : new Date().getFullYear();
+
+        function updateDisplay() {
+            const monthNames = [
+                "JANEIRO",
+                "FEVEREIRO",
+                "MARÇO",
+                "ABRIL",
+                "MAIO",
+                "JUNHO",
+                "JULHO",
+                "AGOSTO",
+                "SETEMBRO",
+                "OUTUBRO",
+                "NOVEMBRO",
+                "DEZEMBRO"];
+            const formattedMonth = (currentMonth + 1).toString().padStart(2, '0');  // Adiciona zero à esquerda se necessário
+            const formattedYear = currentYear.toString();
+
+            monthYearDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            hiddenDateInput.value = `${formattedYear}-${formattedMonth}`;
+
+        }
+
+        // Avançar para o próximo mês
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            updateDisplay();
+
+            const newUrl = `?month=${currentMonth + 1}&year=${currentYear}`;
+            window.location.href = newUrl;
+        }
+
+        // Voltar para o mês anterior
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            updateDisplay();
+
+            // Redirecionar para a nova URL
+            const newUrl = `?month=${currentMonth + 1}&year=${currentYear}`;
+            window.location.href = newUrl;
+        }
+
+        // Adicionar ouvintes de eventos aos botões
+        nextButton.addEventListener('click', nextMonth);
+        prevButton.addEventListener('click', prevMonth);
+
+        // Exibir o mês e o ano iniciais
+        updateDisplay();
+
+    })
+</script>
+
+<script>
+      // ## ATUALIZAR ==============================================
+      const atualizarBtns = $('.atualizar');
+      const atualizarHistorico = async (id, data) => {
+            try {
+                let resultado = await fetch(`/historico/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+
+                if(!resultado.ok) {
+                    alert(`Houve um erro ao tentar atualizar o historico com ID: ${id}!`)
+                    return
+                }
+
+                alert(`historico atualizada com sucesso!`)
+                window.location.reload()
+            }catch (e) {
+                console.log(e)
+                alert(`Houve um erro ao tentar atualizar o historico com ID: ${id}!`)
+            }
+        }
+
+        $(atualizarBtns).each((index, btn) => {
+            let id = $(btn).attr(`data-id`);
+            let nome = $(btn).attr(`data-nome`);
+            let categoriaId = $(btn).attr(`data-categoriaId`);
+            let tipo = $(btn).attr(`data-tipo`);
+            let dataCadastro = $(btn).attr(`data-datacadastro`);
+            let valor = $(btn).attr(`data-valor`);
+            let cor = $(btn).attr(`data-cor`);
+
+
+            $(btn).click(async (e) => {
+                $('#at-id').val(id);
+                $('#at-nome').val(nome);
+                $('#at-categoriaId').val(categoriaId);
+                $('#at-tipo').val(tipo);
+                $('#at-cor').val(cor);
+                $('#at-tipoOriginal').val(tipo);
+                $('#at-dataCadastro').val(dataCadastro.replace("T03:00:00.000Z", ""));
+                $('#at-valor').val(Number(valor).toLocaleString('pt-BR', {style: 'decimal'}))
+                $('#at-valor').maskMoney('mask');
+                
+            });
+        })
+
+        $("#at-atualizar").submit(async (e) => {
+            e.preventDefault()
+            const data = {
+               nome: $('#at-nome').val(),
+               tipo: $('#at-tipo').val(),
+               cor: $('#at-cor').val(),
+               tipoOriginal: $('#at-tipoOriginal').val(),
+               valor: $('#at-valor').maskMoney('unmasked')[0],
+               categoriaId: $('#at-categoriaId').val(),
+               dataCadastro: $('#at-dataCadastro').val()
+            }
+
+            const id = $(`input#at-id`).val();
+
+            console.log(data)
+            atualizarHistorico(id, data)
+        })
+</script>
+</html>

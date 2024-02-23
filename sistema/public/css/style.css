@@ -1,11 +1,13 @@
 
 :root {
     --primaria-texto: #ffffff;
-    --secundaria-texto: #20f734;
+    --segundo-texto: #20f734;
     --terciaria-texto: #122535;
 
-    --primaria: #122535;
-    --secundaria: #1ffe33;
+    --primeiro: #122535;
+    --segundo: #1ffe33;
+    --terceira: #ffffff;
+    --quarta: #3f4e5b;
 
     --sucesso: #1ffe33;
     --info: #2283c5;
@@ -30,7 +32,7 @@ html, body, main {
 }
 
 body {
-    background-color: var(--primaria);
+    background-color: var(--primeiro);
 }
 
 main.container {
@@ -41,8 +43,8 @@ main.container {
 }
 
 .btn-primary, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active  {
-    background-color: var(--secundaria);
-    border-color: var(--secundaria);
+    background-color: var(--segundo);
+    border-color: var(--segundo);
     border-radius: 20px;
     color: var(--terciaria-texto);
     font-weight: 600;
@@ -56,7 +58,7 @@ main.container {
 }
 
 section.cardbase {
-    border: 2px var(--secundaria) solid;
+    border: 2px var(--segundo) solid;
     border-radius: 20px;
     padding: 80px 60px;
 }
@@ -71,7 +73,7 @@ section.cardbase {
 }
 
 .cardbase h1 {
-    color: var(--secundaria-texto);
+    color: var(--segundo-texto);
     margin-bottom: 80px;
     width: 100%;
     text-align: center;
@@ -97,6 +99,13 @@ section.cardbase {
     text-align: center;
 }
 
+.form-control .basic-input {
+    background-color: transparent;
+    border-radius: 10px;
+    border: 2px var(--sucesso) solid;
+    color: var(--primaria-texto);
+}
+
 .cadastro h1 {
     font-family: 'Lato', sans-serif;
     font-weight: 700;
@@ -111,8 +120,8 @@ div.form-group i {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: var(--primaria);
-    color: var(--secundaria-texto);
+    background-color: var(--primeiro);
+    color: var(--segundo-texto);
 }
 .alert {
     margin-top: 35px;
@@ -125,9 +134,9 @@ div.form-group i {
 .btn-second, .btn-second:hover, .btn-second:focus, .btn.btn-second:active,
 .btn-btn-second, .btn-btn-second:hover, .btn-btn-second:not(:disabled):not(.disabled).active, .btn-btn-second:not(:disabled):not(.disabled):active{
     border-radius: 5px;
-    background-color: var(--primaria);
+    background-color: var(--primeiro);
     color: var(--primaria-texto);
-    border: 2px var(--secundaria) solid;
+    border: 2px var(--segundo) solid;
     max-width: 120px;
     font-family: 'Lato', sans-serif;
 }
@@ -138,4 +147,266 @@ div.form-group i {
 
 .size-content {
     margin-top: 20px;
+}
+
+.bg {
+    background-color: var(--primeiro) !important;
+
+}
+
+.nav-item {
+    font-size: 14pt;
+}
+
+.nav-item > .nav-link > .fa-solid {
+    margin-left: 4px;
+}
+
+.nav-item.exit {
+    margin-left: 5px;
+}
+
+.container, .container-fluid {
+    max-height: calc(100% - 60px);
+}
+
+.card {
+    border: 1px solid var(--sucesso);
+    border-radius: 20px;
+    background-color: var(--primeiro);
+    color: var(--primaria-texto);
+}
+
+.card .card-title {
+    font-size: 24pt;
+    display: block;
+    width: 100%;
+    text-align: end;
+}
+
+.card .valor {
+    color: var(--primaria-texto);
+    font-size: 28pt;
+    display: block;
+    width: 100%;
+    text-align: end;
+}
+
+.card.saldo .card-title,
+.card.saldo > .card-body > .icon > span > i {
+    color: var(--info);
+}
+
+.card.receitas .card-title,
+.card.receitas > .card-body > .icon > span > i {
+    color: var(--sucesso);
+}
+
+.card.despesas .card-title,
+.card.despesas > .card-body > .icon > span > i {
+    color: var(--erro);
+}
+
+.card.limite .card-title,
+.card.limite > .card-body > .icon > span > i {
+    color: var(--alerta);
+}
+
+.month-select {
+    justify-content: center;
+    align-items: center;
+}
+
+.month-select > button {
+    background-color: transparent;
+    border: none;
+    border-radius: 10px;
+    color: var(--primaria-texto);
+    font-size: 16pt;
+    font-weight: bold;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+}
+
+.month-select > button:hover {
+    background-color: var(--segundo);
+    color: var(--terciaria-texto);
+    transition: ease-in-out all .5s;
+}
+
+.month-select > .month-content {
+    color: var(--primaria-texto);
+    font-size: 16pt;
+    font-weight: bold;
+    margin: 0 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+}
+
+.month-select > .month-content > i {
+    margin-left: 10px;
+}
+
+.add-btn {
+    border-width: 1px;
+    min-width: 178px;
+    min-height: 50px;
+    border-radius: 30px;
+    font-size: 14pt;
+}
+
+.add-btn:hover, .add-btn:active, .add-btn:focus {
+    border-radius: 30px;
+}
+
+.main-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 60px);
+}
+
+.modal .close {
+    color: var(--primaria-texto);
+}
+
+.modal-body {
+    padding: 0 40px;
+}
+
+.modal .modal-footer, .modal .modal-header {
+    border-top: none;
+    border-bottom: none;
+}
+
+.modal-content {
+    border-radius: 15px;
+    border: 2px solid var(--segundo);
+    border-top: 1px solid var(--segundo);
+    background-color: var(--primeiro);
+}
+
+.input-group {
+    position: relative;
+}
+
+.input-group > .form-control {
+    border: 1px solid var(--segundo);
+    background-color: var(--primeiro);
+
+    border-left: 1px solid var(--primaria-texto);
+    color: var(--primaria-texto);
+}
+
+.input-group > .form-control::placeholder {
+    color: var(--primaria-texto);
+}
+
+.input-group > .input-group-prepend > .input-group-text {
+    background-color: var(--primeiro);
+    border: none;
+    border-top: 1px solid var(--segundo);
+    border-left: 1px solid var(--segundo);
+    border-bottom: 1px solid var(--segundo);
+    color: var(--primaria-texto);
+    min-width: 50px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-size: 14pt;
+}
+
+.input-group > select {
+    border: 1px solid var(--segundo);
+    background-color: var(--primeiro);
+    color: var(--primaria-texto);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+.input-group>.custom-file, .input-group>.custom-select, .input-group>.form-control {
+    font-size: 14pt;
+    height: 45px;
+}
+
+.dataTable {
+    color: var(--primaria-texto);
+}
+
+.dataTables_filter > label > input[type=search]::placeholder {
+    color: var(--quarta);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button,
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {
+    color: var(--primaria-texto) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    color: var(--primaria-texto) !important;
+}
+
+.dataTable, .dataTables_wrapper  {
+    font-size: 16pt;
+}
+
+table.dataTable>thead>tr>th, table.dataTable>thead>tr>td {
+    border-bottom: 1px solid var(--segundo);
+}
+
+table.dataTable.display>tbody>tr.odd>.sorting_1, table.dataTable.order-column.stripe>tbody>tr.odd>.sorting_1,
+table.dataTable.display>tbody>tr.even>.sorting_1, table.dataTable.order-column.stripe>tbody>tr.even>.sorting_1,
+table.dataTable.stripe>tbody>tr.odd>*, table.dataTable.display>tbody>tr.odd>*,
+table.dataTable.stripe>tbody>tr.even>*, table.dataTable.display>tbody>tr.even>* {
+    box-shadow: none;
+    border-bottom: 1px solid var(--quarta);
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 10px;
+    border-color: var(--segundo);
+}
+
+.dataTables_length > label > select {
+    background: transparent;
+    -webkit-appearance: none;
+}
+
+.btn-action {
+    border: none;
+    background-color: transparent;
+    color: var(--primaria-texto);
+    height: 50px;
+    width: 50px;
+    font-size: 16pt;
+}
+
+h2.no-info {
+    text-align: center;
+    padding-top: 100px;
+    font-size: 30pt;
+}
+
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+    color: var(--primaria-texto);
+}
+
+.borda, .line > .form-control {
+    border: solid 2px var(--segundo);
 }
