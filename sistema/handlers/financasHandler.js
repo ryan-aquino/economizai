@@ -68,6 +68,27 @@ module.exports = () => ({
             despesas: despesas,
         })
     },
+    
+    obterDadosMesDashboardByCategoria: async (userId, month, year) => {
+        let totalReceita = await financasRepository.somarReceita(userId, month, year)
+        let totalDespesa = await financasRepository.somarDespesa(userId, month, year)
+
+        let receitasValorTotal = totalReceita.reduce((soma, item) => soma + Number(item.total_categoria), 0);
+        let despesasValorTotal = totalDespesa.reduce((soma, item) => soma + Number(item.total_categoria), 0);
+
+        for (const receita of totalReceita) {
+            receita.Percentual = Math.round((receita.total_categoria / receitasValorTotal) * 100);
+        }
+
+        for (const despesa of totalDespesa) {
+            despesa.Percentual = Math.round((despesa.total_categoria / despesasValorTotal) * 100);
+        }
+
+        return response(true, 200, "", {
+            receitas: totalReceita,
+            despesas: totalDespesa,
+        })
+    },
 
     adicionar: async (data, userId) => {
 
@@ -88,27 +109,6 @@ module.exports = () => ({
             return response(!!financaAdicionada, 201, "");
 
         return response(false, 500, "Houve um erro ao tentar inserir uma finança");
-    },
-
-    obterDadosMesDashboardByCategoria: async (userId, month, year) => {
-        let totalReceita = await financasRepository.somarReceita(userId, month, year)
-        let totalDespesa = await financasRepository.somarDespesa(userId, month, year)
-
-        let receitasValorTotal = totalReceita.reduce((soma, item) => soma + Number(item.total_categoria), 0);
-        let despesasValorTotal = totalDespesa.reduce((soma, item) => soma + Number(item.total_categoria), 0);
-
-        for (const receita of totalReceita) {
-            receita.Percentual = Math.round((receita.total_categoria / receitasValorTotal) * 100);
-        }
-
-        for (const despesa of totalDespesa) {
-            despesa.Percentual = Math.round((despesa.total_categoria / despesasValorTotal) * 100);
-        }
-
-        return response(true, 200, "", {
-            receitas: totalReceita,
-            despesas: totalDespesa,
-        })
     },
 
 })
